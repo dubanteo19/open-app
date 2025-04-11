@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { newsItems } from "./data";
 import { uuid } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export interface NewsCardProps {
   id: number;
@@ -49,6 +50,11 @@ export const News = () => {
         {newsItems.map((item) => (
           <NewsCard {...item} key={uuid()} />
         ))}
+      </div>
+      <div className="mt-2">
+      <Link className="text-primary " to={"/more"}>
+        Show more
+      </Link>
       </div>
     </div>
   );

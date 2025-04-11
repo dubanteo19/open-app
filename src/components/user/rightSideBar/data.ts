@@ -1,3 +1,6 @@
+import { NewsCardProps } from "./News";
+import { UserCardProp } from "./RecommendedFollows";
+
 export const newsItems: NewsCardProps[] = [
   {
     id: 1,
@@ -25,5 +28,26 @@ export const newsItems: NewsCardProps[] = [
     hashTag: "#WorldCup",
     thumbnail:
       "https://english.news.cn/20221219/676c9ba6903645a7a4d99147cf0fe2c1/501d45a089584c1192b2f3dd08f2689b.jpg",
+  },
+];
+
+export const recommendedFollowUsers: UserCardProp[] = [
+  {
+    id: 1,
+    fullName: "Alice Johnson",
+    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+    userName: "alicej",
+  },
+  {
+    id: 2,
+    fullName: "Bob Smith",
+    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
+    userName: "bobsmith",
+  },
+  {
+    id: 3,
+    fullName: "Carol Lee",
+    avatar: "https://randomuser.me/api/portraits/women/3.jpg",
+    userName: "carollee",
   },
 ];
