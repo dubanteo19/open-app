@@ -1,5 +1,5 @@
+import { User } from "@/types/user";
 import { NewsCardProps } from "./News";
-import { UserCardProp } from "./RecommendedFollows";
 
 export const newsItems: NewsCardProps[] = [
   {
@@ -31,7 +31,7 @@ export const newsItems: NewsCardProps[] = [
   },
 ];
 
-export const recommendedFollowUsers: UserCardProp[] = [
+export const recommendedFollowUsers: User[] = [
   {
     id: 1,
     fullName: "Alice Johnson",

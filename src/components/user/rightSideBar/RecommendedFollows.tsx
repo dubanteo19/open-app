@@ -3,14 +3,9 @@ import { uuid } from "@/lib/utils";
 import React from "react";
 import { recommendedFollowUsers } from "./data";
 import { Link } from "react-router-dom";
+import { User } from "@/types/user";
 
-export interface UserCardProp {
-  id: number;
-  fullName: string;
-  avatar: string;
-  userName: string;
-}
-const UserCard: React.FC<UserCardProp> = ({ fullName, avatar, userName }) => {
+const UserCard: React.FC<User> = ({ fullName, avatar, userName }) => {
   return (
     <div className="grid grid-cols-5 ">
       <div className="col-span-1 w-12 h-12 rounded-full overflow-hidden">
