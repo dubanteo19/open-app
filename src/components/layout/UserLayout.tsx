@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { LeftSideBar } from "../admin/LeftSideBar";
-import { RightSideBar } from "../admin/RightSideBar";
+import { LeftSideBar } from "../user/LeftSideBar";
+import { RightSideBar } from "@/components/user/rightSideBar/RightSideBar";
 
 export const UserLayout = () => {
   return (
@@ -9,7 +9,7 @@ export const UserLayout = () => {
       <div className="col-span-7">
         <Outlet />
       </div>
-      <RightSideBar className="col-span-3 bg-orange-500" />
+      <RightSideBar className="col-span-3 " />
     </div>
   );
 };

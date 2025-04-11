@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, uuid } from "@/lib/utils";
 import React, { ReactNode } from "react";
 import { GoHomeFill } from "react-icons/go";
 import { FaHashnode, FaUser } from "react-icons/fa6";
@@ -62,10 +62,10 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
         </div>
         <div className="mt-2">
           {links.map((link) => (
-            <SideBarLink {...link} />
+            <SideBarLink {...link} key={uuid()} />
           ))}
         </div>
-        <div className=" mr-8">
+        <div className="mr-8">
           <Button className="rounded-full w-full py-5 ">Post</Button>
         </div>
       </div>
