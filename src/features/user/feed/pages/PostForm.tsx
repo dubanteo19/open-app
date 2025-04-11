@@ -6,7 +6,7 @@ import { FaImage } from "react-icons/fa6";
 
 export const PostForm = () => {
   return (
-    <div className="grid grid-cols-12 p-3 border-2 border-gray-200">
+    <div className="grid grid-cols-12 p-3 border-t-2 border-t-gray-200">
       <div className="col-span-1">
         <Avatar>
           <AvatarImage
