@@ -5,7 +5,7 @@ import { RightSideBar } from "../admin/RightSideBar";
 export const UserLayout = () => {
   return (
     <div className="grid grid-cols-12 h-screen px-16">
-      <LeftSideBar className="col-span-2 bg-green-500" />
+      <LeftSideBar className="col-span-2 " />
       <div className="col-span-7">
         <Outlet />
       </div>
