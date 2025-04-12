@@ -4,8 +4,8 @@ import { PostList } from "./PostList";
 
 export const FeedPage = () => {
   return (
-    <div className="flex flex-col  ">
-      <div className="top-0  z-10  w-full  h-14  flex bg-white   sticky">
+    <div className="flex flex-col ">
+      <div className="top-0  z-10  h-14  flex bg-white   sticky">
         <Button
           variant="ghost"
           className="font-bold border-b-3 border-b-primary flex-1 rounded-none"
