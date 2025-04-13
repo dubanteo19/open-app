@@ -18,13 +18,11 @@ const AuthorInfo: React.FC<{
     <div id="author" className="flex justify-between">
       <div className="flex items-center space-x-1 m-0">
         <Link className="font-bold" to={`user/${author.id}`}>
-          {author.fullName}
+          {author.displayName}
         </Link>
         {author.verified && <MdVerified color="green" />}
         <Link className="text-sm text-gray-500 " to={`user/${author.id}`}>
-          @{author.userName}
-         - 
-          {props.dateTime}
+          @{author.userName}-{props.dateTime}
         </Link>
       </div>
       <div>

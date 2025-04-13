@@ -5,18 +5,18 @@ import { recommendedFollowUsers } from "./data";
 import { Link } from "react-router-dom";
 import { User } from "@/types/user";
 
-const UserCard: React.FC<User> = ({ fullName, avatar, userName }) => {
+const UserCard: React.FC<User> = ({ displayName, avatar, userName }) => {
   return (
-    <div className="grid grid-cols-5 ">
-      <div className="col-span-1 w-12 h-12 rounded-full overflow-hidden">
+    <div className="grid grid-cols-5 mr-2">
+      <div className="col-span-1 w-12 bg-red-500 h-12 overflow-hidden rounded-full ">
         <img src={avatar} />
       </div>
       <div className="col-span-3">
-        <strong>{fullName}</strong>
+        <strong>{displayName}</strong>
         <p className="text-gray-500">@{userName}</p>
       </div>
       <div className="col-span-1 ">
-        <Button variant="outline" className="rounded-full font-bold">
+        <Button variant="outline" size="sm" className="rounded-full font-bold">
           Follow
         </Button>
       </div>
