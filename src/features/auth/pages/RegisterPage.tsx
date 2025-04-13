@@ -5,14 +5,16 @@ import { FormField, FormItem, FormControl, FormMessage, Form } from '@/component
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
 const formSchema = z
   .object({
-    name: z.string().min(2, 'Name must be at least 2 characters'),
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-    confirmPassword: z.string(),
+    name: z.string().nonempty("Name is required").min(2, 'Name must be at least 2 characters'),
+    username: z.string().nonempty("UsernameUsername is required").min(2, 'Name must be at least 2 characters'),
+    email: z.string().nonempty("Email is required").email('Invalid email address'),
+    password: z.string().nonempty("Password is required").min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z.string().nonempty("confirm Password is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -26,6 +28,7 @@ export const Register = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      username: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -61,6 +64,19 @@ export const Register = () => {
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Name" {...field} className="h-12 px-4 py-3 text-base rounded-lg" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Username" {...field} className="h-12 px-4 py-3 text-base rounded-lg" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -113,9 +129,9 @@ export const Register = () => {
         </Form>
         <p className="text-sm mt-4 text-center">
           Already have an account?{' '}
-          <a href="/login" className="text-blue-500 hover:underline">
+          <Link to="/login" className="text-blue-500 hover:underline">
             Sign in
-          </a>
+          </Link>
         </p>
       </div>
     </div>
