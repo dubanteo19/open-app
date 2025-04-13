@@ -48,10 +48,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
   ];
   return (
     <div
-      className={cn(
-        "flex flex-col border-r-2 border-r-gray-200 justify-between py-2 h-screen ",
-        className,
-      )}
+      className={cn("flex flex-col  justify-between py-2 h-screen ", className)}
     >
       <div className="w-full">
         <div className="w-10 h-10 ">

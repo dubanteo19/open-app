@@ -34,19 +34,19 @@ export const newsItems: NewsCardProps[] = [
 export const recommendedFollowUsers: User[] = [
   {
     id: 1,
-    fullName: "Alice Johnson",
+    displayName: "Alice Johnson",
     avatar: "https://randomuser.me/api/portraits/women/1.jpg",
     userName: "alicej",
   },
   {
     id: 2,
-    fullName: "Bob Smith",
+    displayName: "Bob Smith",
     avatar: "https://randomuser.me/api/portraits/men/2.jpg",
     userName: "bobsmith",
   },
   {
     id: 3,
-    fullName: "Carol Lee",
+    displayName: "Carol Lee",
     avatar: "https://randomuser.me/api/portraits/women/3.jpg",
     userName: "carollee",
   },

@@ -18,13 +18,11 @@ const AuthorInfo: React.FC<{
     <div id="author" className="flex justify-between">
       <div className="flex items-center space-x-1 m-0">
         <Link className="font-bold" to={`user/${author.id}`}>
-          {author.fullName}
+          {author.displayName}
         </Link>
         {author.verified && <MdVerified color="green" />}
         <Link className="text-sm text-gray-500 " to={`user/${author.id}`}>
-          @{author.userName}
-         - 
-          {props.dateTime}
+          @{author.userName}-{props.dateTime}
         </Link>
       </div>
       <div>
@@ -45,7 +43,7 @@ const PostItem: React.FC<Post> = ({
   dateTime,
 }) => {
   return (
-    <div className="grid grid-cols-12 p-x-3   border-t-2 border-t-gray-200">
+    <div className="grid grid-cols-12 p-x-3 w-full  border-t-2 border-t-gray-200">
       <div className="col-span-1  flex flex-row-reverse ">
         <Avatar className="mr-2 mt-2">
           <AvatarImage
@@ -82,7 +80,7 @@ const PostItem: React.FC<Post> = ({
 };
 export const PostList = () => {
   return (
-    <div className="flex flex-col px-2">
+    <div className="flex flex-col px-2 w-full">
       {posts.map((post) => (
         <PostItem {...post} key={uuid()} />
       ))}

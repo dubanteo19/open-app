@@ -4,7 +4,7 @@ export const posts: Post[] = [
     id: 1,
     author: {
       id: 101,
-      fullName: "Alice Johnson",
+      displayName: "Alice Johnson",
       avatar: "https://randomuser.me/api/portraits/men/19.jpg",
       userName: "alicej",
       verified: true,
@@ -19,7 +19,7 @@ export const posts: Post[] = [
     id: 1,
     author: {
       id: 101,
-      fullName: "Alice Johnson",
+      displayName: "Alice Johnson",
       avatar: "https://randomuser.me/api/portraits/men/19.jpg",
       userName: "alicej",
       verified: true,
@@ -34,7 +34,7 @@ export const posts: Post[] = [
     id: 2,
     author: {
       id: 102,
-      fullName: "Brian Smith",
+      displayName: "Brian Smith",
       avatar: "https://randomuser.me/api/portraits/men/3.jpg",
       userName: "briansmith",
     },
@@ -49,7 +49,7 @@ export const posts: Post[] = [
     id: 3,
     author: {
       id: 103,
-      fullName: "Carla Nguyen",
+      displayName: "Carla Nguyen",
       avatar: "https://randomuser.me/api/portraits/men/6.jpg",
       userName: "carla.dev",
       verified: true,
@@ -66,7 +66,7 @@ export const posts: Post[] = [
     author: {
       id: 104,
       avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-      fullName: "David Kim",
+      displayName: "David Kim",
       userName: "davidk",
     },
     dateTime: "2025-04-08T09:00:00Z",
@@ -79,7 +79,7 @@ export const posts: Post[] = [
     id: 5,
     author: {
       id: 105,
-      fullName: "Ella Martinez",
+      displayName: "Ella Martinez",
       avatar: "https://randomuser.me/api/portraits/men/9.jpg",
       userName: "ellam",
       verified: true,

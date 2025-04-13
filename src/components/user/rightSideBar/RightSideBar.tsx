@@ -15,11 +15,11 @@ interface Props {
 }
 export const RightSideBar: React.FC<Props> = ({ className }) => {
   return (
-    <div className={cn("flex flex-col gap-y-2 ", className)}>
+    <div className={cn("flex flex-col gap-y-2 mt-2", className)}>
       <SearchBar />
       <News />
       <RecommendedFollows />
-      <div>
+      <div className="text-sm">
         <p>Terms of Service Privacy Policy Cookie Policy</p>
         <p>Ads info More © 2021 Twitter, Inc.</p>
       </div>
