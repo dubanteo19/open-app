@@ -3,10 +3,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { MdEmojiEmotions } from "react-icons/md";
 import { FaImage } from "react-icons/fa6";
+import { useState } from "react";
+import { useCreatePostMutation } from "../api";
+import { Loader } from "@/components/common/Loader";
 
 export const PostForm = () => {
+  const [content, setcontent] = useState<string>("");
+  const [createPost, { isLoading }] = useCreatePostMutation();
+  const handleSubmit = async () => {
+    try {
+      await createPost({ openerId: 2, payload: { content } }).unwrap();
+      setcontent("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="grid grid-cols-12 p-3 border-t-2 border-t-gray-200">
+      {isLoading && <Loader />}
       <div className="col-span-1">
         <Avatar>
           <AvatarImage
@@ -19,6 +33,10 @@ export const PostForm = () => {
       <div className="col-span-11 flex flex-col">
         <div className="border-b-2 border-b-gray-200">
           <Textarea
+            value={content}
+            onChange={(event) => {
+              setcontent(event.target.value);
+            }}
             maxLength={400}
             className="border-none resize-none focus-visible:border-none focus-visible:ring-0"
             placeholder="What's happening"
@@ -34,7 +52,14 @@ export const PostForm = () => {
             </Button>
           </div>
           <div>
-            <Button className="px-6 rounded-full">Post</Button>
+            <Button
+              className="px-6 rounded-full"
+              disabled={isLoading || !content}
+              type="submit"
+              onClick={handleSubmit}
+            >
+              Post
+            </Button>
           </div>
         </div>
       </div>

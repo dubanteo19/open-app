@@ -5,11 +5,13 @@ import { Post, PostCreateRequset } from "@/types/post";
 import { createApi } from "@reduxjs/toolkit/query/react";
 export const postApi = createApi({
   reducerPath: "postApi",
+  tagTypes: ["Post"],
   baseQuery: baseQuery,
   endpoints: (build) => ({
     getPosts: build.query<PageResponse<Post>, PageRequest>({
       query: ({ page, size }) => `posts?page=${page}&size=${size}`,
       transformResponse: extractData,
+      providesTags: ["Post"],
     }),
     createPost: build.mutation<string, PostCreateRequset>({
       query: (body) => ({
@@ -17,7 +19,8 @@ export const postApi = createApi({
         url: "/posts",
         body: body,
       }),
+      invalidatesTags: ["Post"],
     }),
   }),
 });
-export const { useGetPostsQuery } = postApi;
+export const { useGetPostsQuery, useCreatePostMutation } = postApi;

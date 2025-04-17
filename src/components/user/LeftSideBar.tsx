@@ -96,9 +96,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant="ghost">
-              <IoIosMore />
-            </Button>
+            <IoIosMore />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>My account</DropdownMenuLabel>
