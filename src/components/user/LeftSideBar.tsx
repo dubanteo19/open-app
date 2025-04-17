@@ -7,6 +7,16 @@ import { IoIosMore } from "react-icons/io";
 
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/shared/store";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { logout } from "@/features/auth/slice";
 interface SideBarLinkProps {
   href: string;
   name: string;
@@ -46,6 +56,11 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
     { name: "Profile", href: "/", icon: <FaUser size={25} /> },
     { name: "More", href: "/", icon: <IoIosMore size={25} /> },
   ];
+  const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+  };
   return (
     <div
       className={cn("flex flex-col  justify-between py-2 h-screen ", className)}
@@ -75,13 +90,25 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
             />
           </div>
           <div className="flex flex-col">
-            <h4 className="font-bold">Du Ban Teo</h4>
-            <p>@dubanteo</p>
+            <h4 className="font-bold">{user?.displayName}</h4>
+            <p>@{user?.username}</p>
           </div>
         </div>
-        <Button variant="ghost">
-          <IoIosMore />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="ghost">
+              <IoIosMore />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>My account</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <Button variant="ghost" onClick={handleLogout}>
+                Logout
+              </Button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

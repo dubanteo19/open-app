@@ -2,7 +2,7 @@ export interface User {
   id: number;
   displayName: string;
   avatar: string;
-  userName: string;
+  username: string;
   verified?: boolean;
 }
 export interface UserDetail extends User {
