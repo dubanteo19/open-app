@@ -9,17 +9,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation } from "react-router-dom";
-import { z } from "zod";
 import { FaEye } from "react-icons/fa";
-import { IoMdEyeOff } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
-import { AlertCircle } from "lucide-react";
+import { IoMdEyeOff } from "react-icons/io";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { z } from "zod";
 
+import { Loader } from "@/components/common/Loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
+import { useLoginMutation } from "../api";
 
 const schema = z.object({
   email: z
@@ -34,30 +36,28 @@ type FormData = z.infer<typeof schema>;
 
 export const LoginPage = () => {
   const location = useLocation();
-  const successMessage = location.state;
-  if (successMessage) {
-    toast.success("Register successfully");
+  const message = location.state;
+  if (message) {
+    toast.info(message);
   }
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
   });
-
+  const [login, { isLoading, error }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setloginError] = useState<string | null>(null);
-  const onSubmit = (data: FormData) => {
-    console.log("Dữ liệu đăng nhập:", data);
-    // Gọi API đăng nhập ở đây
-    const isPasswordCorrect = false; // Trả về mật khẩu không chính xác
-    const isEmailCorrect = false; // Giả lập email đúng
-    if (!isPasswordCorrect || !isEmailCorrect) {
-      setloginError("Incorrect login information. Please try again.");
-    } else {
-      setloginError(null);
+  const navigate = useNavigate();
+  const onSubmit = async (data: FormData) => {
+    try {
+      const res = await login(data).unwrap();
+      if (res) navigate("/feed");
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      {isLoading && <Loader />}
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center text-3xl font-bold flex items-center justify-center gap-x-1.5">
@@ -83,7 +83,7 @@ export const LoginPage = () => {
                 <span className="mx-3 text-gray-400 text-sm">or</span>
                 <div className="flex-grow h-px bg-gray-300" />
               </div>
-              {loginError && (
+              {error && (
                 <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>Error</AlertTitle>

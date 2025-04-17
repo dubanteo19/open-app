@@ -19,6 +19,7 @@ import { z } from "zod";
 import { useRegisterMutation } from "../api";
 import { toast } from "sonner";
 import { log } from "console";
+import { Loader } from "@/components/common/Loader";
 
 const formSchema = z
   .object({
@@ -77,6 +78,7 @@ export const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 my-1">
+      {isLoading && <Loader />}
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center text-3xl font-bold flex items-center justify-center gap-x-1.5">
