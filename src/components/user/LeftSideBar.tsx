@@ -5,7 +5,7 @@ import { FaHashnode, FaUser } from "react-icons/fa6";
 import { IoNotificationsSharp, IoMail, IoBookmark } from "react-icons/io5";
 import { IoIosMore } from "react-icons/io";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
@@ -58,8 +58,10 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
   ];
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/login");
   };
   return (
     <div

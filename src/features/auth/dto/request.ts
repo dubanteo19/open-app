@@ -1,3 +1,6 @@
+export interface GoogleLoginRequest {
+  idToken: string;
+}
 export interface LoginRequest {
   email: string;
   password: string;
