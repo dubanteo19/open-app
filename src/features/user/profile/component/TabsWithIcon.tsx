@@ -1,6 +1,9 @@
 import { useState } from "react";
 
 import { PostList } from "@/features/user/feed/pages/PostList.tsx";
+import { useParams } from "react-router-dom";
+import { useGetOpenerPostsQuery } from "../api";
+import { Loader } from "@/components/common/Loader";
 
 function Tweets() {
   return <PostList />;
@@ -13,7 +16,7 @@ function Likes() {
 const tabs = [
   {
     label: "Tweets",
-    icon: "heelo",
+    icon: "hello",
     content: <Tweets />,
   },
   {
@@ -23,10 +26,18 @@ const tabs = [
   },
 ];
 export function TabsWithIcon() {
+  const { username } = useParams();
+  const { data: posts, isLoading } = useGetOpenerPostsQuery({
+    username: username,
+    page: {
+      page: 0,
+      size: 10,
+    },
+  });
   const [activeTab, setActiveTab] = useState(0);
-
   return (
     <div className="w-full bg-white shadow-md">
+      {isLoading && <Loader/>}
       {/* Tab header */}
       <div className="flex border-b w-full">
         {tabs.map((tab, index) => {
@@ -42,15 +53,13 @@ export function TabsWithIcon() {
       : "border-transparent text-gray-500 hover:text-blue-500"
   }`}
             >
-              <Icon className="w-5 h-5" />
               {tab.label}
             </button>
           );
         })}
       </div>
-
-      {/* Tab content */}
       <div className="p-5 w-full">{tabs[activeTab].content}</div>
+      {posts && <PostList posts={posts.content} />}
     </div>
   );
 }

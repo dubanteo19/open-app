@@ -6,13 +6,16 @@ import { FaImage } from "react-icons/fa6";
 import { useState } from "react";
 import { useCreatePostMutation } from "../api";
 import { Loader } from "@/components/common/Loader";
+import { useSelector } from "react-redux";
+import { RootState } from "@/shared/store";
 
 export const PostForm = () => {
   const [content, setcontent] = useState<string>("");
   const [createPost, { isLoading }] = useCreatePostMutation();
+  const { user } = useSelector((state: RootState) => state.auth);
   const handleSubmit = async () => {
     try {
-      await createPost({ openerId: 2, payload: { content } }).unwrap();
+      await createPost({ openerId: user?.id, payload: { content } }).unwrap();
       setcontent("");
     } catch (error) {
       console.log(error);

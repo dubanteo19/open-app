@@ -13,6 +13,7 @@ export const postApi = createApi({
       transformResponse: extractData,
       providesTags: ["Post"],
     }),
+
     createPost: build.mutation<string, PostCreateRequset>({
       query: (body) => ({
         method: "post",
@@ -21,6 +22,17 @@ export const postApi = createApi({
       }),
       invalidatesTags: ["Post"],
     }),
+    deletePost: build.mutation<void, number>({
+      query: (postId) => ({
+        method: "delete",
+        url: `/posts/${postId}`,
+      }),
+      invalidatesTags: ["Post"],
+    }),
   }),
 });
-export const { useGetPostsQuery, useCreatePostMutation } = postApi;
+export const {
+  useGetPostsQuery,
+  useCreatePostMutation,
+  useDeletePostMutation,
+} = postApi;

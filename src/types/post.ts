@@ -3,11 +3,11 @@ export interface PostPayload {
   content: string;
 }
 export interface PostUpdateRequset {
-  postId: number;
+  postId?: number;
   payload: PostPayload;
 }
 export interface PostCreateRequset {
-  openerId: number;
+  openerId?: number;
   payload: PostPayload;
 }
 export interface Post {
