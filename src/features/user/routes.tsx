@@ -15,7 +15,7 @@ export const userRoutes: RouteObject = {
   children: [
     { index: true, element: <Navigate to={"feed"} /> },
     { path: "feed", index: true, element: <FeedPage /> },
-    { path: "profile", index: true, element: <ProfilePage /> },
+    { path: "profile/:username", element: <ProfilePage /> },
     { path: "notifications", element: <NotificationsPage /> },
   ],
 };

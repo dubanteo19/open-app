@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -37,9 +37,11 @@ type FormData = z.infer<typeof schema>;
 export const LoginPage = () => {
   const location = useLocation();
   const message = location.state;
-  if (message) {
-    toast.info(message);
-  }
+  useEffect(() => {
+    if (message) {
+      toast.info(message);
+    }
+  }, [message]);
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
   });

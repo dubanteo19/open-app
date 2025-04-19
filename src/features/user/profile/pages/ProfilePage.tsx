@@ -1,16 +1,32 @@
 import { UserInfo } from "@/features/user/profile/component/UserInfo.tsx";
 import { Avatar } from "@/features/user/profile/component/Avatar.tsx";
 import { TabsWithIcon } from "@/features/user/profile/component/TabsWithIcon.tsx";
-import { userInfo } from "@/features/user/profile/data";
+import { useParams } from "react-router-dom";
+import { useGetProfileQuery } from "../api";
+import { Loader } from "@/components/common/Loader";
+import { useSelector } from "react-redux";
+import { RootState } from "@/shared/store";
 
 export const ProfilePage = () => {
-  const info = userInfo;
+  const { username } = useParams();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const { data: info, isLoading } = useGetProfileQuery(username || "");
   return (
     <div>
-      {/* Truyền hàm updateUserInfo vào Avatar */}
-      <Avatar {...info} />
-      <UserInfo {...info} />
-      <TabsWithIcon />
+      {isLoading && <Loader />}
+      {info && (
+        <div>
+          <Avatar
+            isMine={username == user?.username}
+            {...info.summary}
+            openerId={info.summary.id}
+            bio={info.bio}
+            location={info.location}
+          />
+          <UserInfo {...info} />
+          <TabsWithIcon />
+        </div>
+      )}
     </div>
   );
 };
