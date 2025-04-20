@@ -13,7 +13,6 @@ import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import { IoMdEyeOff } from "react-icons/io";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -22,6 +21,7 @@ import { Loader } from "@/components/common/Loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { useLoginMutation } from "../api";
+import { GoogleLoginButton } from "../components/GoogleLoginButton";
 
 const schema = z.object({
   email: z
@@ -74,10 +74,7 @@ export const LoginPage = () => {
         </CardHeader>
         <CardContent className="">
           <Form {...form}>
-            <Button className="flex items-center justify-center w-full h-12 px-4 py-3 border border-gray-300 rounded-full bg-accent hover:bg-primary text-black">
-              <FcGoogle size={32} />
-              Sign up with Google
-            </Button>
+            <GoogleLoginButton/>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               {/* Dòng phân cách */}
               <div className="flex items-center my-4">

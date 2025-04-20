@@ -1,12 +1,12 @@
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,25 +15,27 @@ import { RootState } from "@/shared/store";
 import { Post } from "@/types/post";
 import { User } from "@/types/user";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { BookmarkIcon, EditIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { FaComment, FaEye, FaHeart } from "react-icons/fa6";
 import { IoIosMore } from "react-icons/io";
 import { MdVerified } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useDeletePostMutation } from "../api";
+import { opendir } from "fs";
+import { openDialog } from "../slice";
 const AuthorInfo: React.FC<{
   author: User;
   updatedAt?: string;
   postId: number;
   isMine: boolean;
-  handleDelete?: () => void;
+  handleOpenEditDialog?: () => void;
 }> = (props) => {
   const author = props.author;
   const [showDialog, setshowDialog] = useState<boolean>(false);
@@ -73,7 +75,10 @@ const AuthorInfo: React.FC<{
           <PopoverContent className="w-35 z-40 bg-white rounded shadow-2xl">
             {props.isMine ? (
               <div className="flex flex-col space-y-1 cursor-pointer">
-                <div className="flex items-center p-1 space-x-2 hover:bg-gray-500/20">
+                <div
+                  onClick={props.handleOpenEditDialog}
+                  className="flex items-center p-1 space-x-2 hover:bg-gray-500/20"
+                >
                   <EditIcon />
                   <p>Edit post</p>
                 </div>
@@ -129,6 +134,10 @@ const PostItem: React.FC<Post & { isMine: boolean }> = ({
   comments,
   updatedAt,
 }) => {
+  const dispatch = useDispatch();
+  const handleOpenEditDialog = () => {
+    dispatch(openDialog({ postId: id, content }));
+  };
   return (
     <div className="grid grid-cols-12 p-x-3 w-full  border-t-2 border-t-gray-200">
       <div className="col-span-1  flex flex-row-reverse ">
@@ -145,6 +154,7 @@ const PostItem: React.FC<Post & { isMine: boolean }> = ({
       </div>
       <div className="col-span-11 flex flex-col">
         <AuthorInfo
+          handleOpenEditDialog={handleOpenEditDialog}
           isMine={isMine}
           author={author}
           postId={id}

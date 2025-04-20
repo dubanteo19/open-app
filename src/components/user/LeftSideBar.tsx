@@ -5,7 +5,7 @@ import { FaHashnode, FaUser } from "react-icons/fa6";
 import { IoNotificationsSharp, IoMail, IoBookmark } from "react-icons/io5";
 import { IoIosMore } from "react-icons/io";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
@@ -58,8 +58,10 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
   ];
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logout());
+    navigate("/login");
   };
   return (
     <div
@@ -88,7 +90,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
           <div className="w-10 h-10 rounded-full overflow-hidden ">
             <img
               className="w-full h-full"
-              src="https://i.pravatar.cc/50?u=a042581"
+              src={user?.avatarUrl}
             />
           </div>
           <div className="flex flex-col">

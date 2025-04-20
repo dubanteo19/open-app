@@ -1,7 +1,11 @@
 import { extractData } from "@/lib/utils";
 import { baseQuery } from "@/shared/baseQuerry";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { LoginRequest, RegisterRequest } from "./dto/request";
+import {
+  GoogleLoginRequest,
+  LoginRequest,
+  RegisterRequest,
+} from "./dto/request";
 import { LoginResponse, UserResponse } from "./dto/response";
 import { setUser } from "./slice";
 
@@ -15,6 +19,24 @@ export const authApi = createApi({
         url: "/auth/register",
         body,
       }),
+    }),
+
+    googleLogin: build.mutation<LoginResponse, GoogleLoginRequest>({
+      query: ({ idToken }) => ({
+        method: "POST",
+        url: "/auth/google",
+        body: { token: idToken },
+      }),
+      transformResponse: extractData,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          localStorage.setItem("accessToken", data.accessToken);
+          dispatch(setUser(data.user));
+        } catch (error) {
+          console.log("login failed", error);
+        }
+      },
     }),
     login: build.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({
@@ -39,5 +61,9 @@ export const authApi = createApi({
     }),
   }),
 });
-export const { useLoginMutation, useRegisterMutation, useAuthMeQuery } =
-  authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useAuthMeQuery,
+  useGoogleLoginMutation,
+} = authApi;

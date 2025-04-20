@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { PostList } from "@/features/user/feed/pages/PostList.tsx";
 import { useParams } from "react-router-dom";
-import { useGetOpenerPostsQuery } from "../api";
 import { Loader } from "@/components/common/Loader";
+import { useGetOpenerPostsQuery } from "../../feed/api";
 
 function Tweets() {
   return <PostList />;

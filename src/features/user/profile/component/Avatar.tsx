@@ -53,7 +53,7 @@ export const Avatar: React.FC<AvatarProps> = (userInfo) => {
             alt="Avatar"
           />
         </div>
-        {userInfo.isMine && (
+        {userInfo.isMine ? (
           <div className="text-right pt-6">
             <button
               onClick={openModal}
@@ -61,6 +61,10 @@ export const Avatar: React.FC<AvatarProps> = (userInfo) => {
             >
               Edit profile
             </button>
+          </div>
+        ) : (
+          <div className="text-right pt-6">
+            <button className="px-4 py-1 opacity-0  text-sm border rounded-full font-medium hover:bg-gray-100"></button>
           </div>
         )}
       </div>

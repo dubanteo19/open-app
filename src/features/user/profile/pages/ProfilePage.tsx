@@ -6,6 +6,7 @@ import { useGetProfileQuery } from "../api";
 import { Loader } from "@/components/common/Loader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
+import { EditPostDialog } from "@/shared/components/EditPostDialog";
 
 export const ProfilePage = () => {
   const { username } = useParams();
@@ -14,6 +15,8 @@ export const ProfilePage = () => {
   return (
     <div>
       {isLoading && <Loader />}
+
+      <EditPostDialog />
       {info && (
         <div>
           <Avatar
