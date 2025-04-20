@@ -9,14 +9,15 @@ export const GoogleLoginButton = () => {
   return (
     <div>
       {isLoading && <Loader />}
-
       <GoogleLogin
         onSuccess={(credentialResponse) => {
           if (credentialResponse.credential) {
-            gooleLogin({
+            const re = gooleLogin({
               idToken: credentialResponse.credential,
             }).unwrap();
-            navigate("/feed");
+            re.then(() => {
+              navigate("/feed");
+            });
           }
         }}
         onError={() => console.log("login failed")}

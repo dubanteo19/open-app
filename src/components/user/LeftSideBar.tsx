@@ -90,7 +90,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
           <div className="w-10 h-10 rounded-full overflow-hidden ">
             <img
               className="w-full h-full"
-              src="https://i.pravatar.cc/50?u=a042581"
+              src={user?.avatarUrl}
             />
           </div>
           <div className="flex flex-col">

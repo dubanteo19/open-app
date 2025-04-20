@@ -1,9 +1,10 @@
+import { Loader } from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
-import { PostForm } from "./PostForm";
-import { PostList } from "./PostList";
 import { useState } from "react";
 import { PageRequest, useGetPostsQuery } from "../api";
-import { Loader } from "@/components/common/Loader";
+import { PostForm } from "./PostForm";
+import { PostList } from "./PostList";
+import { EditPostDialog } from "@/shared/components/EditPostDialog";
 
 export const FeedPage = () => {
   const [page, setPage] = useState<PageRequest>({ page: 0, size: 10 });
@@ -11,6 +12,7 @@ export const FeedPage = () => {
   return (
     <div className="flex flex-col ">
       {isLoading && <Loader />}
+      <EditPostDialog />
       <div className="top-0  z-10  h-14  flex bg-white   sticky">
         <Button
           variant="ghost"

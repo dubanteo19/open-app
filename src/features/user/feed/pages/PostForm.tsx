@@ -29,7 +29,7 @@ export const PostForm = () => {
           <AvatarImage
             width={40}
             className="rounded-full"
-            src="https://randomuser.me/api/portraits/men/2.jpg"
+            src={user?.avatarUrl}
           />
         </Avatar>
       </div>
