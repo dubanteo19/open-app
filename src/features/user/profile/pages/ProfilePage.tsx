@@ -7,18 +7,18 @@ import { Loader } from "@/components/common/Loader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
 import { EditPostDialog } from "@/shared/components/EditPostDialog";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export const ProfilePage = () => {
   const { username } = useParams();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { data: info, isLoading } = useGetProfileQuery(username || "");
+  const { data: info, isLoading } = useGetProfileQuery(username ?? skipToken);
   return (
     <div>
       {isLoading && <Loader />}
-
       <EditPostDialog />
       {info && (
-        <div>
+        <div className="pb-4">
           <Avatar
             isMine={username == user?.username}
             {...info.summary}

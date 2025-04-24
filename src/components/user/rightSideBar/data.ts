@@ -35,19 +35,19 @@ export const recommendedFollowUsers: User[] = [
   {
     id: 1,
     displayName: "Alice Johnson",
-    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-    userName: "alicej",
+    avatarUrl: "https://randomuser.me/api/portraits/women/1.jpg",
+    username: "alicej",
   },
   {
     id: 2,
     displayName: "Bob Smith",
-    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-    userName: "bobsmith",
+    avatarUrl: "https://randomuser.me/api/portraits/men/2.jpg",
+    username: "bobsmith",
   },
   {
     id: 3,
     displayName: "Carol Lee",
-    avatar: "https://randomuser.me/api/portraits/women/3.jpg",
-    userName: "carollee",
+    avatarUrl: "https://randomuser.me/api/portraits/women/3.jpg",
+    username: "carollee",
   },
 ];

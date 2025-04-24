@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { uuid } from "@/lib/utils";
-import React from "react";
-import { recommendedFollowUsers } from "./data";
-import { Link } from "react-router-dom";
 import { User } from "@/types/user";
+import React from "react";
+import { Link } from "react-router-dom";
+import { recommendedFollowUsers } from "./data";
 
-const UserCard: React.FC<User> = ({ displayName, avatar, userName }) => {
+const UserCard: React.FC<User> = ({ displayName, avatarUrl, username }) => {
   return (
     <div className="grid grid-cols-5 mr-2">
       <div className="col-span-1 w-12 bg-red-500 h-12 overflow-hidden rounded-full ">
-        <img src={avatar} />
+        <img src={avatarUrl} />
       </div>
       <div className="col-span-3">
         <strong>{displayName}</strong>
-        <p className="text-gray-500">@{userName}</p>
+        <p className="text-gray-500">@{username}</p>
       </div>
       <div className="col-span-1 ">
         <Button variant="outline" size="sm" className="rounded-full font-bold">

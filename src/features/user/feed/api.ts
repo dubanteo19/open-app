@@ -5,20 +5,30 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { PageRequest, PageResponse } from "@/types/page";
 export const postApi = createApi({
   reducerPath: "postApi",
-  tagTypes: ["Post" ],
+  tagTypes: ["Post"],
   baseQuery: baseQuery,
   endpoints: (build) => ({
     getPosts: build.query<PageResponse<Post>, PageRequest>({
-      query: ({ page, size }) => `posts?page=${page}&size=${size}`,
+      query: (page) => ({
+        url: `posts`,
+        params: page,
+      }),
       transformResponse: extractData,
       providesTags: ["Post"],
+    }),
+    getPostById: build.query<Post, number>({
+      query: (postId) => `/posts/${postId}`,
+      providesTags: ["Post"],
+      transformResponse: extractData,
     }),
     getOpenerPosts: build.query<
       PageResponse<Post>,
       { page: PageRequest; username?: string }
     >({
-      query: ({ page, username }) =>
-        `/openers/${username}/posts?page=${page.page}&size=${page.size}`,
+      query: ({ page, username }) => ({
+        url: `/openers/${username}/posts`,
+        params: page,
+      }),
       providesTags: ["Post"],
       transformResponse: extractData,
     }),
@@ -53,4 +63,5 @@ export const {
   useCreatePostMutation,
   useDeletePostMutation,
   useUpdatePostMutation,
+  useGetPostByIdQuery,
 } = postApi;
