@@ -25,11 +25,11 @@ import { FaComment, FaEye, FaHeart } from "react-icons/fa6";
 import { IoIosMore } from "react-icons/io";
 import { MdVerified } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDeletePostMutation } from "../api";
-import { opendir } from "fs";
 import { openDialog } from "../slice";
+import { AvatarFallback } from "@radix-ui/react-avatar";
 const AuthorInfo: React.FC<{
   author: User;
   updatedAt?: string;
@@ -124,7 +124,7 @@ const AuthorInfo: React.FC<{
     </div>
   );
 };
-const PostItem: React.FC<Post & { isMine: boolean }> = ({
+export const PostItem: React.FC<Post & { isMine: boolean }> = ({
   author,
   id,
   isMine,
@@ -138,6 +138,7 @@ const PostItem: React.FC<Post & { isMine: boolean }> = ({
   const handleOpenEditDialog = () => {
     dispatch(openDialog({ postId: id, content }));
   };
+  const navigate = useNavigate();
   return (
     <div className="grid grid-cols-12 p-x-3 w-full  border-t-2 border-t-gray-200">
       <div className="col-span-1  flex flex-row-reverse ">
@@ -160,7 +161,12 @@ const PostItem: React.FC<Post & { isMine: boolean }> = ({
           postId={id}
           updatedAt={updatedAt?.substring(0, 7)}
         />
-        <div className="lg:my-1">{content}</div>
+        <div
+          className="lg:my-1 cursor-pointer"
+          onClick={() => navigate(`/${author.username}/post/${id}`)}
+        >
+          {content}
+        </div>
         <div className="flex w-full">
           <Button variant="ghost">
             <FaHeart />

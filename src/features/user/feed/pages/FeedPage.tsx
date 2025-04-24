@@ -1,13 +1,14 @@
 import { Loader } from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
+import { EditPostDialog } from "@/shared/components/EditPostDialog";
 import { useState } from "react";
-import { PageRequest, useGetPostsQuery } from "../api";
 import { PostForm } from "./PostForm";
 import { PostList } from "./PostList";
-import { EditPostDialog } from "@/shared/components/EditPostDialog";
+import { PageRequest } from "@/types/page";
+import { useGetPostsQuery } from "../api";
 
 export const FeedPage = () => {
-  const [page, setPage] = useState<PageRequest>({ page: 0, size: 10 });
+  const [page] = useState<PageRequest>({ page: 0, size: 10 });
   const { data: posts, isLoading } = useGetPostsQuery(page);
   return (
     <div className="flex flex-col ">

@@ -18,7 +18,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useRegisterMutation } from "../api";
 import { toast } from "sonner";
-import { log } from "console";
 import { Loader } from "@/components/common/Loader";
 
 const formSchema = z
@@ -213,7 +212,7 @@ export const Register = () => {
                   </FormItem>
                 )}
               />
-              {error && <p className="text-error">{error.data.errors}</p>}
+              {error && <p className="text-error">{}</p>}
               <Button
                 type="submit"
                 disabled={isLoading}

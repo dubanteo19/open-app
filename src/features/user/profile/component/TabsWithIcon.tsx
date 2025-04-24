@@ -41,7 +41,6 @@ export function TabsWithIcon() {
       {/* Tab header */}
       <div className="flex border-b w-full">
         {tabs.map((tab, index) => {
-          const Icon = tab.icon;
           return (
             <button
               key={index}
@@ -58,7 +57,7 @@ export function TabsWithIcon() {
           );
         })}
       </div>
-      <div className="p-5 w-full">{tabs[activeTab].content}</div>
+      <div className="my-2 w-full">{tabs[activeTab].content}</div>
       {posts && <PostList posts={posts.content} />}
     </div>
   );
