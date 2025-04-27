@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RootState } from "@/shared/store";
 import { getSocketClient } from "@/shared/websocket";
 import { debounce } from "lodash";
-import { useCallback, useMemo, useState } from "react";
+import {  useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
