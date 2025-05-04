@@ -51,7 +51,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
       href: "/",
       icon: <IoNotificationsSharp size={25} />,
     },
-    { name: "Messages", href: "/", icon: <IoMail size={25} /> },
+    { name: "Messages", href: "/message", icon: <IoMail size={25} /> },
     { name: "Bookmarks", href: "/", icon: <IoBookmark size={25} /> },
     { name: "Profile", href: "/", icon: <FaUser size={25} /> },
     { name: "More", href: "/", icon: <IoIosMore size={25} /> },

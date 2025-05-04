@@ -6,10 +6,12 @@ import { useDispatch } from "react-redux";
 import { postApi } from "@/features/user/feed/api";
 import { openerApi } from "@/features/user/profile/api";
 import { commentApi } from "@/features/user/comment/api";
+import chatReducer from "@/features/message/dto/slice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     post: postReducer,
+    chat: chatReducer,
     [authApi.reducerPath]: authApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [commentApi.reducerPath]: commentApi.reducer,
