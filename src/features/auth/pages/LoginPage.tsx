@@ -22,6 +22,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { useLoginMutation } from "../api";
 import { GoogleLoginButton } from "../components/GoogleLoginButton";
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 
 const schema = z.object({
   email: z
@@ -56,7 +58,6 @@ export const LoginPage = () => {
       console.log(error);
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       {isLoading && <Loader />}
@@ -74,7 +75,7 @@ export const LoginPage = () => {
         </CardHeader>
         <CardContent className="">
           <Form {...form}>
-            <GoogleLoginButton/>
+            <GoogleLoginButton />
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               {/* Dòng phân cách */}
               <div className="flex items-center my-4">

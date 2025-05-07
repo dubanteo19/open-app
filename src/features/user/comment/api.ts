@@ -1,4 +1,4 @@
-import { baseQuery } from "@/shared/baseQuerry";
+import { baseQuery } from "@/shared/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import {
   CommentCreateRequest,
@@ -22,7 +22,6 @@ export const commentApi = createApi({
         params: body.page,
       }),
       transformResponse: extractData,
-      providesTags: ["Comment"],
     }),
     createComment: build.mutation<CommentResponse, CommentCreateRequest>({
       query: (body) => ({
@@ -30,7 +29,7 @@ export const commentApi = createApi({
         url: `/posts/${body.postId}/comments`,
         body: body,
       }),
-      invalidatesTags: ["Comment"],
+      transformResponse: extractData,
     }),
     updateComment: build.mutation<string, CommentUpdateRequest>({
       query: (body) => ({
