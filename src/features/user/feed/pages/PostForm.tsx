@@ -3,13 +3,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { MdEmojiEmotions } from "react-icons/md";
 import { FaImage } from "react-icons/fa6";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { useCreatePostMutation } from "../api";
 import { Loader } from "@/components/common/Loader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
 
-export const PostForm = () => {
+interface PostFormProps {
+  onPostCreated: () => void;
+}
+export const PostForm: FC<PostFormProps> = ({ onPostCreated }) => {
   const [content, setcontent] = useState<string>("");
   const [createPost, { isLoading }] = useCreatePostMutation();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -17,6 +20,7 @@ export const PostForm = () => {
     try {
       await createPost({ openerId: user?.id, payload: { content } }).unwrap();
       setcontent("");
+      onPostCreated();
     } catch (error) {
       console.log(error);
     }
