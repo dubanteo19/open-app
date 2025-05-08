@@ -1,5 +1,5 @@
 import { extractData } from "@/lib/utils";
-import { baseQuery } from "@/shared/baseQuerry";
+import { baseQuery } from "@/shared/baseQuery";
 import { Post, PostCreateRequset, PostUpdateRequset } from "@/types/post";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { PageRequest, PageResponse } from "@/types/page";

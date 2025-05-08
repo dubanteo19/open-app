@@ -1,5 +1,5 @@
 import { extractData } from "@/lib/utils";
-import { baseQuery } from "@/shared/baseQuerry";
+import { baseQuery } from "@/shared/baseQuery";
 import { OpenerDetail, OpenerUpdateRequest } from "@/types/user";
 import { createApi } from "@reduxjs/toolkit/query/react";
 export const openerApi = createApi({
@@ -23,7 +23,4 @@ export const openerApi = createApi({
     }),
   }),
 });
-export const {
-  useGetProfileQuery,
-  useUpdateProfileMutation,
-} = openerApi;
+export const { useGetProfileQuery, useUpdateProfileMutation } = openerApi;
