@@ -12,6 +12,7 @@ export const chatRouter: RouteObject = {
     children: [
         { index: true, element: <Navigate to={"message"} /> },
         {path: "message", element: <ChatPage />},
+        {path: "message/:conversationId", element: <ChatPage />},
         // {path: "chat/:userId", index: true, element: <ChatPage />},
     ],
 }

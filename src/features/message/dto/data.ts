@@ -40,7 +40,7 @@ export const users: User[] = [
 ];
 
 export const conversationList: Conversation[] = [];
-export const conversationDetailList: ConversationDetail[] = [2, 3, 4].map((userId, idx) => {
+export const conversationDetailList: ConversationDetail[] = [2, 3, 4, 5].map((userId, idx) => {
   const currentUser = users[0];
   const otherUser = users.find(u => u.id === userId)!;
   const conversationId = idx + 1;
@@ -52,7 +52,7 @@ export const conversationDetailList: ConversationDetail[] = [2, 3, 4].map((userI
       id: i + 1,
       conversationId,
       sender,
-      content: `${prefix}: Đây là nội dung tin nhắn thứ ${i + 1} giữa ${currentUser.displayName} và ${otherUser.displayName}`,
+      content: `${prefix}: Đây là nội dung tin nhắn thứ ${i + 1} giữa ${currentUser.displayName} và ${otherUser.displayName}đâsdadsabmmnbnnbnmbnmbmnbmbmnđâsdadsabmmnbnnbnmbnmbmnbmbmnđâsdadsabmmnbnnbnmbnmbmnbmbmnđâsdadsabmmnbnnbnmbnmbmnbmbmnđâsdadsabmmnbnnbnmbnmbmnbmbmn`,
       time: new Date(Date.now() - (i + idx * 10) * 60000).toISOString(),
       isGroup: false,
       state: i % 3 === 0 ? "read" : "sent"

@@ -6,7 +6,7 @@ export interface Conversation {
     lastMessage: Message;
     avatar?: string;
     unread: boolean;
-    isGroup: boolean;
+    isGroup?: boolean;
     memberName?: string;
   }
 
@@ -16,8 +16,6 @@ export interface Message {
     sender: User;
     content: string;
     time: string;
-    isGroup: boolean;
-    state?: string;// MessageState
     // emoji?: string;
 }
 
