@@ -1,6 +1,5 @@
 import { Loader } from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
-import { EditPostDialog } from "@/shared/components/EditPostDialog";
 import { useEffect, useState } from "react";
 import { PostForm } from "./PostForm";
 import { PostList } from "./PostList";
@@ -32,7 +31,6 @@ export const FeedPage = () => {
   return (
     <div className="flex flex-col ">
       {isLoading && <Loader />}
-      <EditPostDialog />
       <div className="top-0  z-10  h-14  flex bg-white   sticky">
         <Button
           variant="ghost"
