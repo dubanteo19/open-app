@@ -1,109 +1,57 @@
-import { useState } from "react";
-import ProfileForm from "@/features/user/profile/component/ProfileForm.tsx";
 import { Button } from "@/components/ui/button";
-import { MdCancel } from "react-icons/md";
+import { Dialog } from "@/components/ui/dialog";
 import { AVATAR } from "@/shared/constant";
-import { useUpdateProfileMutation } from "../api";
-import { Loader } from "@/components/common/Loader";
+import { useState } from "react";
+import { EditProfileForm } from "./EditProfileForm";
+import { Edit } from "lucide-react";
+import { EditAvatar } from "./EditAvatar";
 interface AvatarProps {
   openerId: number;
   displayName: string;
   bio: string;
-  location: string;
   avatarUrl: string;
-  username?: string;
+  location: string;
   isMine: boolean;
 }
 
 export const Avatar: React.FC<AvatarProps> = (userInfo) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [displayName, setDisplayName] = useState(userInfo.displayName);
-  const [bio, setBio] = useState(userInfo.bio);
-  const [location, setLocation] = useState(userInfo.location);
-  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
-  const openModal = () => {
-    setDisplayName(userInfo.displayName);
-    setBio(userInfo.bio);
-    setLocation(userInfo.location);
-    setIsOpen(true); // Mở modal
-  };
-
-  const handleSave = async () => {
-    try {
-      await updateProfile({
-        openerId: userInfo.openerId,
-        displayName,
-        bio,
-        location,
-      }).unwrap();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [openAvatarDialog, setOpenAvatarDialog] = useState<boolean>(false);
   return (
-    <>
-      {isLoading && <Loader />}
-      <div className="h-48 bg-gradient-to-r from-pink-400 to-purple-600"></div>
-      <div className="relative px-6">
+    <div className="flex  flex-col">
+      <div className="h-48  bg-gradient-to-r from-pink-400 to-purple-600"></div>
+      <div className="relative  px-6 h-20">
         <div className="absolute -top-16">
-          <img
-            className="w-32 h-32 rounded-full border-4 border-white"
-            src={userInfo.avatarUrl || AVATAR} // Sử dụng avatar từ state
-            alt="Avatar"
-          />
-        </div>
-        {userInfo.isMine ? (
-          <div className="text-right pt-6">
-            <button
-              onClick={openModal}
-              className="px-4 py-1 text-sm border rounded-full font-medium hover:bg-gray-100"
+          <div className="relative">
+            <img
+              className="size-32 rounded-full border-4 border-white"
+              src={userInfo.avatarUrl || AVATAR}
+              alt="Avatar"
+            />
+            <Button
+              variant="ghost"
+              onClick={() => setOpenAvatarDialog(true)}
+              className="absolute rounded-full -right-4 bottom-2"
             >
+              <Edit />
+            </Button>
+          </div>
+        </div>
+        <div className="text-right  pt-6 absolute right-0">
+          {userInfo.isMine && (
+            <Button onClick={() => setOpenDialog(true)} variant={"ghost"}>
               Edit profile
-            </button>
-          </div>
-        ) : (
-          <div className="text-right pt-6">
-            <button className="px-4 py-1 opacity-0  text-sm border rounded-full font-medium hover:bg-gray-100"></button>
-          </div>
-        )}
+            </Button>
+          )}
+        </div>
       </div>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center px-4">
-          <div className="bg-white pt-16 pb-8 px-6 rounded-2xl shadow-2xl w-full max-w-md relative">
-            <Button
-              className="absolute top-2 left-2 cursor-pointer"
-              onClick={() => {
-                setIsOpen(false);
-              }}
-              variant="ghost"
-            >
-              <MdCancel />
-            </Button>
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2">
-              <img
-                className="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover"
-                src={userInfo.avatarUrl || AVATAR}
-                alt="Avatar"
-              />
-            </div>
-
-            <h2 className="text-xl font-bold text-center text-gray-800 mb-6">
-              Chỉnh sửa hồ sơ
-            </h2>
-            <ProfileForm
-              displayName={displayName}
-              bio={bio}
-              location={location}
-              setDisplayName={setDisplayName}
-              setBio={setBio}
-              setLocation={setLocation}
-              onSave={handleSave}
-            />
-          </div>
-        </div>
-      )}
-    </>
+      <Dialog open={openAvatarDialog} onOpenChange={setOpenAvatarDialog}>
+        <EditAvatar {...userInfo} onSave={() => setOpenAvatarDialog(false)} />
+      </Dialog>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <EditProfileForm {...userInfo} onSave={() => setOpenDialog(false)} />
+      </Dialog>
+    </div>
   );
 };

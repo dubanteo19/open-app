@@ -28,7 +28,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDeletePostMutation } from "../api";
-import { openDialog } from "../slice";
 const AuthorInfo: React.FC<{
   author: User;
   updatedAt?: string;
@@ -133,10 +132,6 @@ export const PostItem: React.FC<Post & { isMine: boolean }> = ({
   commentCount,
   updatedAt,
 }) => {
-  const dispatch = useDispatch();
-  const handleOpenEditDialog = () => {
-    dispatch(openDialog({ postId: id, content }));
-  };
   const navigate = useNavigate();
   return (
     <div className="grid grid-cols-12 p-x-3 w-full  border-t-2 border-t-gray-200">
@@ -154,7 +149,6 @@ export const PostItem: React.FC<Post & { isMine: boolean }> = ({
       </div>
       <div className="col-span-11 flex flex-col">
         <AuthorInfo
-          handleOpenEditDialog={handleOpenEditDialog}
           isMine={isMine}
           author={author}
           postId={id}
