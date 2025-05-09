@@ -5,19 +5,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { RootState } from "@/shared/store";
 import { getSocketClient } from "@/shared/websocket";
 import { debounce } from "lodash";
-import {  useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useCreateCommentMutation } from "../../comment/api";
 import { Loader } from "lucide-react";
+import { CommentResponse } from "../dto/comment";
 interface CommentFormProps {
   authorUsername?: string;
   postId?: number;
+  onSaveComment: (comment: CommentResponse) => void;
 }
 export const CommentForm: React.FC<CommentFormProps> = ({
   authorUsername,
   postId,
+  onSaveComment,
 }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [content, setcontent] = useState<string>("");
@@ -32,6 +35,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       if (re) {
         setcontent("");
         toast.success("Comment created");
+        onSaveComment(re);
       }
     } catch (error) {
       console.log(error);

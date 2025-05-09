@@ -1,6 +1,4 @@
-// socketClient.ts
-import { Client, IMessage, Stomp, StompSubscription } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
+import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 
 let socketClient: Client | null = null;
 
@@ -14,10 +12,7 @@ export const getSocketClient = (): Client | null => {
   }
 
   socketClient = new Client({
-    webSocketFactory: () =>
-      new SockJS(
-        `http://localhost:8080/ws?access_token=${encodeURIComponent(token)}`,
-      ),
+    brokerURL: `ws://localhost:8080/ws?access_token=${encodeURIComponent(token)}`,
     connectHeaders: { Authorization: `Bearer ${token}` },
     reconnectDelay: 10000,
     debug: (str) => console.log(str),

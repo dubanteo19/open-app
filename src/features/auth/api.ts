@@ -1,5 +1,5 @@
 import { extractData } from "@/lib/utils";
-import { baseQuery } from "@/shared/baseQuerry";
+import { baseQuery } from "@/shared/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import {
   GoogleLoginRequest,

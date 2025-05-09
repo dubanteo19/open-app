@@ -15,7 +15,7 @@ export interface Post {
   author: User;
   updatedAt?: string;
   content: string;
-  likes?: number;
-  views?: number;
-  comments?: number;
+  likeCount?: number;
+  viewCount?: number;
+  commentCount?: number;
 }

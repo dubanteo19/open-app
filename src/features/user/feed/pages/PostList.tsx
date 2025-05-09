@@ -28,8 +28,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDeletePostMutation } from "../api";
-import { openDialog } from "../slice";
-import { AvatarFallback } from "@radix-ui/react-avatar";
 const AuthorInfo: React.FC<{
   author: User;
   updatedAt?: string;
@@ -129,15 +127,11 @@ export const PostItem: React.FC<Post & { isMine: boolean }> = ({
   id,
   isMine,
   content,
-  views,
-  likes,
-  comments,
+  viewCount,
+  likeCount,
+  commentCount,
   updatedAt,
 }) => {
-  const dispatch = useDispatch();
-  const handleOpenEditDialog = () => {
-    dispatch(openDialog({ postId: id, content }));
-  };
   const navigate = useNavigate();
   return (
     <div className="grid grid-cols-12 p-x-3 w-full  border-t-2 border-t-gray-200">
@@ -155,14 +149,13 @@ export const PostItem: React.FC<Post & { isMine: boolean }> = ({
       </div>
       <div className="col-span-11 flex flex-col">
         <AuthorInfo
-          handleOpenEditDialog={handleOpenEditDialog}
           isMine={isMine}
           author={author}
           postId={id}
           updatedAt={updatedAt?.substring(0, 7)}
         />
         <div
-          className="lg:my-1 cursor-pointer"
+          className="lg:my-1 cursor-pointer wrap-break-word"
           onClick={() => navigate(`/${author.username}/post/${id}`)}
         >
           {content}
@@ -170,15 +163,15 @@ export const PostItem: React.FC<Post & { isMine: boolean }> = ({
         <div className="flex w-full">
           <Button variant="ghost">
             <FaHeart />
-            {likes || 0}
+            {likeCount || 0}
           </Button>
           <Button variant="ghost">
             <FaEye />
-            {views || 0}
+            {viewCount || 0}
           </Button>
           <Button variant="ghost">
             <FaComment />
-            {comments || 0}
+            {commentCount || 0}
           </Button>
         </div>
       </div>
