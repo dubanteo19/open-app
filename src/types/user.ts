@@ -13,6 +13,10 @@ export interface OpenerDetail {
   following: number;
   followers: number;
 }
+export interface OpenerUpdateAvatarRequest {
+  openerId: number;
+  avatarUrl: string;
+}
 export interface OpenerUpdateRequest {
   openerId: number;
   displayName?: string;

@@ -5,7 +5,7 @@ import { FaHashnode, FaUser } from "react-icons/fa6";
 import { IoNotificationsSharp, IoMail, IoBookmark } from "react-icons/io5";
 import { IoIosMore } from "react-icons/io";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
@@ -43,22 +43,34 @@ interface Props {
   className?: string;
 }
 export const LeftSideBar: React.FC<Props> = ({ className }) => {
+  const { user } = useSelector((state: RootState) => state.auth);
   const links: SideBarLinkProps[] = [
-    { name: "Home", href: "/", icon: <GoHomeFill size={25} />, active: true },
-    { name: "Explore", href: "/", icon: <FaHashnode size={25} /> },
+    { name: "Home", href: "/feed", icon: <GoHomeFill size={25} /> },
+    { name: "Explore", href: "/explore", icon: <FaHashnode size={25} /> },
     {
       name: "Notifications",
-      href: "/",
+      href: "/notifications",
       icon: <IoNotificationsSharp size={25} />,
     },
+<<<<<<< HEAD
     { name: "Messages", href: "/message", icon: <IoMail size={25} /> },
     { name: "Bookmarks", href: "/", icon: <IoBookmark size={25} /> },
     { name: "Profile", href: "/", icon: <FaUser size={25} /> },
     { name: "More", href: "/", icon: <IoIosMore size={25} /> },
+=======
+    { name: "Messages", href: "/messages", icon: <IoMail size={25} /> },
+    { name: "Bookmarks", href: "/bookmarks", icon: <IoBookmark size={25} /> },
+    {
+      name: "Profile",
+      href: `/profile/${user?.username}`,
+      icon: <FaUser size={25} />,
+    },
+    { name: "More", href: "/more", icon: <IoIosMore size={25} /> },
+>>>>>>> 7c85856de91e66c5b841cbdb2ce46762a85ecf79
   ];
-  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
@@ -78,7 +90,11 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
         </div>
         <div className="mt-2">
           {links.map((link) => (
-            <SideBarLink {...link} key={uuid()} />
+            <SideBarLink
+              {...link}
+              key={uuid()}
+              active={location.pathname.startsWith(link.href)}
+            />
           ))}
         </div>
         <div className="mr-8">
@@ -88,10 +104,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
       <div className="flex space-x-2 justify-between items-center">
         <div className="flex  space-x-2 items-center">
           <div className="w-10 h-10 rounded-full overflow-hidden ">
-            <img
-              className="w-full h-full"
-              src={user?.avatarUrl}
-            />
+            <img className="w-full h-full" src={user?.avatarUrl} />
           </div>
           <div className="flex flex-col">
             <h4 className="font-bold">{user?.displayName}</h4>

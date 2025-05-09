@@ -20,7 +20,7 @@ interface CommentFormProps {
 export const CommentForm: React.FC<CommentFormProps> = ({
   authorUsername,
   postId,
-  onSaveComment
+  onSaveComment,
 }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [content, setcontent] = useState<string>("");
@@ -35,7 +35,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       if (re) {
         setcontent("");
         toast.success("Comment created");
-        onSaveComment(re)
+        onSaveComment(re);
       }
     } catch (error) {
       console.log(error);

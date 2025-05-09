@@ -1,6 +1,10 @@
 import { extractData } from "@/lib/utils";
 import { baseQuery } from "@/shared/baseQuery";
-import { OpenerDetail, OpenerUpdateRequest } from "@/types/user";
+import {
+  OpenerDetail,
+  OpenerUpdateAvatarRequest,
+  OpenerUpdateRequest,
+} from "@/types/user";
 import { createApi } from "@reduxjs/toolkit/query/react";
 export const openerApi = createApi({
   reducerPath: "openerApi",
@@ -11,6 +15,19 @@ export const openerApi = createApi({
       query: (username) => `/openers/${username}`,
       transformResponse: extractData,
       providesTags: ["Opener"],
+    }),
+    getImages: build.query<string[], string>({
+      query: (q) => `/images?q=${q}`,
+      transformResponse: extractData,
+    }),
+    updateAvatar: build.mutation<OpenerDetail, OpenerUpdateAvatarRequest>({
+      query: (body) => ({
+        url: `/openers/${body.openerId}/avatar`,
+        method: "PUT",
+        body: body.avatarUrl,
+      }),
+      transformResponse: extractData,
+      invalidatesTags: ["Opener"],
     }),
     updateProfile: build.mutation<OpenerDetail, OpenerUpdateRequest>({
       query: (body) => ({
@@ -23,4 +40,9 @@ export const openerApi = createApi({
     }),
   }),
 });
-export const { useGetProfileQuery, useUpdateProfileMutation } = openerApi;
+export const {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+  useUpdateAvatarMutation,
+  useLazyGetImagesQuery,
+} = openerApi;
