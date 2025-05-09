@@ -9,11 +9,7 @@ import chatReducer from "@/features/message/dto/slice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-<<<<<<< HEAD
-    post: postReducer,
     chat: chatReducer,
-=======
->>>>>>> 7c85856de91e66c5b841cbdb2ce46762a85ecf79
     [authApi.reducerPath]: authApi.reducer,
     [postApi.reducerPath]: postApi.reducer,
     [commentApi.reducerPath]: commentApi.reducer,

@@ -52,12 +52,6 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
       href: "/notifications",
       icon: <IoNotificationsSharp size={25} />,
     },
-<<<<<<< HEAD
-    { name: "Messages", href: "/message", icon: <IoMail size={25} /> },
-    { name: "Bookmarks", href: "/", icon: <IoBookmark size={25} /> },
-    { name: "Profile", href: "/", icon: <FaUser size={25} /> },
-    { name: "More", href: "/", icon: <IoIosMore size={25} /> },
-=======
     { name: "Messages", href: "/messages", icon: <IoMail size={25} /> },
     { name: "Bookmarks", href: "/bookmarks", icon: <IoBookmark size={25} /> },
     {
@@ -66,7 +60,6 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
       icon: <FaUser size={25} />,
     },
     { name: "More", href: "/more", icon: <IoIosMore size={25} /> },
->>>>>>> 7c85856de91e66c5b841cbdb2ce46762a85ecf79
   ];
   const dispatch = useDispatch();
   const navigate = useNavigate();
