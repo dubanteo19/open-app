@@ -19,8 +19,8 @@ export const Avatar: React.FC<AvatarProps> = (userInfo) => {
   const [openAvatarDialog, setOpenAvatarDialog] = useState<boolean>(false);
   return (
     <div className="flex  flex-col">
-      <div className="h-48  bg-gradient-to-r from-pink-400 to-purple-600"></div>
-      <div className="relative  px-6 h-20">
+      <div className="h-46  bg-gradient-to-r from-pink-400 to-purple-600"></div>
+      <div className="relative  px-6 h-16">
         <div className="absolute -top-16">
           <div className="relative">
             <img

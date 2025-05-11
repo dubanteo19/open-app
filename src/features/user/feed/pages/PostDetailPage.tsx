@@ -6,7 +6,6 @@ import { useGetCommentsByPostIdQuery } from "../../comment/api";
 import { TypingIndicator } from "../../comment/components/TypingIndicator";
 import { useGetPostByIdQuery } from "../api";
 import { CommentList } from "../components/CommentList";
-import { PostItem } from "./PostList";
 import { useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
 import { CommentForm } from "../../comment/components/CommentForm";
@@ -19,6 +18,7 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { CommentResponse } from "../../comment/dto/comment";
+import { PostItem } from "../components/PostItem";
 export const PostDetailPage = () => {
   const { postId } = useParams();
   const pageSize = 5;
@@ -54,10 +54,8 @@ export const PostDetailPage = () => {
     if (!client) return;
     const topic = `/topic/posts/${postId}/comments`;
     const unsubscribe = subscribeWhenConnected(client, topic, (message) => {
-      console.log("subscribe", topic);
       const payload = JSON.parse(message.body);
       if (payload.username != user?.username) {
-        console.log(payload);
         updateVisibleComment(payload.comment);
         toast.info("There is new comment");
       }

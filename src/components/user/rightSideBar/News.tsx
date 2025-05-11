@@ -43,7 +43,7 @@ const NewsCard: React.FC<NewsCardProps> = ({
 };
 export const News = () => {
   return (
-    <div className="bg-gray-100 rounded-2xl p-2">
+    <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl p-2">
       <h3 className="my-1">What's happening</h3>
       <div>
         {newsItems.map((item) => (
@@ -51,9 +51,9 @@ export const News = () => {
         ))}
       </div>
       <div className="mt-2">
-      <Link className="text-primary " to={"/more"}>
-        Show more
-      </Link>
+        <Link className="text-primary " to={"/more"}>
+          Show more
+        </Link>
       </div>
     </div>
   );

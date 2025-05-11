@@ -4,13 +4,13 @@ import { FaUsersRectangle } from "react-icons/fa6";
 import { GoLocation } from "react-icons/go";
 
 export const UserInfo: React.FC<OpenerDetail> = (userInfo) => (
-  <div className=" mx-auto px-6 py-2 bg-white shadow-md">
-    <h1 className="text-3xl font-semibold text-gray-900">
-      {userInfo.summary.displayName}
-    </h1>
+  <div className=" mx-auto px-6  bg-white dark:bg-gray-900 shadow-md">
+    <h1 className="text-3xl font-semibold ">{userInfo.summary.displayName}</h1>
     <p className="text-gray-600 text-sm">@{userInfo.summary.username}</p>
-    <p className="text-gray-700 mt-4">{userInfo.bio}</p>
-    <div className="flex flex-wrap gap-6 mt-6 text-sm text-gray-500">
+    <p className="text-gray-700 mt-4 wrap-break-word max-w-[500px] max-h-30 overflow-auto ">
+      {userInfo.bio}
+    </p>
+    <div className="flex flex-wrap gap-6 mt-6 text-sm  text-gray-500">
       <span className="flex items-center gap-2">
         <GoLocation />
         {userInfo.location}

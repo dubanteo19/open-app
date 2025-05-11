@@ -25,7 +25,7 @@ const UserCard: React.FC<User> = ({ displayName, avatarUrl, username }) => {
 };
 export const RecommendedFollows = () => {
   return (
-    <div className="bg-gray-100 rounded-2xl p-y-2 px-4">
+    <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl p-y-2 px-4">
       <h3 className="my-1">Who to follow</h3>
       <div className="flex flex-col space-y-2 mt-2">
         {recommendedFollowUsers.map((user) => (

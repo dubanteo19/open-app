@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { PostList } from "@/features/user/feed/pages/PostList.tsx";
 import { useParams } from "react-router-dom";
 import { Loader } from "@/components/common/Loader";
 import { useGetOpenerPostsQuery } from "../../feed/api";
+import { PostList } from "../../feed/components/PostList";
 
 function Tweets() {
   return <PostList />;
@@ -36,8 +36,8 @@ export function TabsWithIcon() {
   });
   const [activeTab, setActiveTab] = useState(0);
   return (
-    <div className="w-full bg-white shadow-md">
-      {isLoading && <Loader/>}
+    <div className="w-full mt-2">
+      {isLoading && <Loader />}
       {/* Tab header */}
       <div className="flex border-b w-full">
         {tabs.map((tab, index) => {
