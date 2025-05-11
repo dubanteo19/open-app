@@ -28,8 +28,12 @@ import { z } from "zod";
 import { useUpdateProfileMutation } from "../api";
 import { toast } from "sonner";
 const formSchema = z.object({
-  displayName: z.string().min(2, "Name must be at least 2 characters"),
-  bio: z.string(),
+  displayName: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .max(20, "Your name's too long"),
+  bio: z.string().max(300, "Bio max length is 300 characters"),
   location: z.string().min(2, "location must be at least 2 characters"),
 });
 type FormSchema = z.infer<typeof formSchema>;
@@ -104,7 +108,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
                 </FormLabel>
                 <FormControl>
                   <Textarea
-                    maxLength={400}
+                    maxLength={300}
                     onChange={(e) => {
                       field.onChange(e.target.value);
                     }}

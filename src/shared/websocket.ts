@@ -12,7 +12,7 @@ export const getSocketClient = (): Client | null => {
   }
 
   socketClient = new Client({
-    brokerURL: `ws://localhost:8080/ws?access_token=${encodeURIComponent(token)}`,
+    brokerURL: `ws://192.168.1.55:8080/ws?access_token=${encodeURIComponent(token)}`,
     connectHeaders: { Authorization: `Bearer ${token}` },
     reconnectDelay: 10000,
     debug: (str) => console.log(str),

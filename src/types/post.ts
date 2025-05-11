@@ -13,8 +13,9 @@ export interface PostCreateRequset {
 export interface Post {
   id: number;
   author: User;
-  updatedAt?: string;
+  sentiment: number;
   content: string;
+  updatedAt?: string;
   likeCount?: number;
   viewCount?: number;
   commentCount?: number;
