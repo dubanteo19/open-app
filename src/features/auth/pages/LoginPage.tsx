@@ -1,15 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye } from "react-icons/fa";
@@ -18,12 +17,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 import { Loader } from "@/components/common/Loader";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toastError } from "@/features/user/feed/util";
 import { toast } from "sonner";
 import { useLoginMutation } from "../api";
 import { GoogleLoginButton } from "../components/GoogleLoginButton";
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
 
 const schema = z.object({
   email: z
@@ -55,6 +52,7 @@ export const LoginPage = () => {
       const res = await login(data).unwrap();
       if (res) navigate("/feed");
     } catch (error) {
+      toastError(error);
       console.log(error);
     }
   };
@@ -83,15 +81,6 @@ export const LoginPage = () => {
                 <span className="mx-3 text-gray-400 text-sm">or</span>
                 <div className="flex-grow h-px bg-gray-300" />
               </div>
-              {error && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>
-                    Incorrect login information. Please try again.
-                  </AlertDescription>
-                </Alert>
-              )}
 
               <FormField
                 control={form.control}

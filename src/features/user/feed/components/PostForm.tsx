@@ -1,13 +1,19 @@
+import { Loader } from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import { MdEmojiEmotions } from "react-icons/md";
-import { FaImage } from "react-icons/fa6";
-import { FC, useState } from "react";
-import { useCreatePostMutation } from "../api";
-import { Loader } from "@/components/common/Loader";
-import { useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { FC, useState } from "react";
+import { FaImage } from "react-icons/fa6";
+import { MdEmojiEmotions } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { useCreatePostMutation } from "../api";
+import { handleError } from "../util";
+import { AlertDialog } from "@/components/ui/alert-dialog";
+import { ErrorAlertDialog } from "./diaglogs/ErrorAlertDialog";
+import { ErrorCode } from "@/shared/errorCode";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { logout } from "@/features/auth/slice";
 
 interface PostFormProps {
   onPostCreated: () => void;
@@ -16,13 +22,24 @@ export const PostForm: FC<PostFormProps> = ({ onPostCreated }) => {
   const [content, setcontent] = useState<string>("");
   const [createPost, { isLoading }] = useCreatePostMutation();
   const { user } = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const [errorDialog, setErrorDialog] = useState<{
+    open: boolean;
+    message: string;
+  }>({ message: "", open: false });
+  const errorMessageCallback = (message: string, code: ErrorCode) => {
+    if (code === ErrorCode.OPENER_BLOCKED) {
+      dispatch(logout());
+    }
+    setErrorDialog({ open: true, message });
+  };
   const handleSubmit = async () => {
     try {
       await createPost({ openerId: user?.id, payload: { content } }).unwrap();
       setcontent("");
       onPostCreated();
     } catch (error) {
-      console.log(error);
+      handleError(error, errorMessageCallback);
     }
   };
   return (
@@ -61,7 +78,7 @@ export const PostForm: FC<PostFormProps> = ({ onPostCreated }) => {
           <div>
             <Button
               className="px-6 rounded-full"
-              disabled={isLoading || !content}
+              disabled={isLoading || !content.trim()}
               type="submit"
               onClick={handleSubmit}
             >
@@ -70,6 +87,12 @@ export const PostForm: FC<PostFormProps> = ({ onPostCreated }) => {
           </div>
         </div>
       </div>
+      <AlertDialog
+        open={errorDialog.open}
+        onOpenChange={(open) => setErrorDialog({ open, message: "" })}
+      >
+        <ErrorAlertDialog message={errorDialog.message} />
+      </AlertDialog>
     </div>
   );
 };

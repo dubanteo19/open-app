@@ -1,9 +1,9 @@
-import { Post } from "@/types/post";
-import { FaComment, FaEye, FaHeart } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { formatTime } from "@/lib/utils";
+import { Post } from "@/types/post";
+import { FaComment, FaEye, FaHeart } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import { AuthorInfo } from "./AvatarInfo";
 export const PostItem: React.FC<Post & { isMine: boolean }> = ({
   author,
@@ -41,7 +41,7 @@ export const PostItem: React.FC<Post & { isMine: boolean }> = ({
           sentiment={sentiment}
         />
         <div
-          className="lg:my-1 cursor-pointer wrap-break-word"
+          className="lg:my-1 cursor-pointer wrap-break-word whitespace-pre-wrap"
           onClick={() => navigate(`/${author.username}/post/${id}`)}
         >
           {content}

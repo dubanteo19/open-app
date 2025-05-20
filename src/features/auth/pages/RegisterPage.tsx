@@ -1,13 +1,15 @@
+import { Loader } from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { handleError } from "@/features/user/feed/util";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,8 +19,6 @@ import { IoMdEyeOff } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useRegisterMutation } from "../api";
-import { toast } from "sonner";
-import { Loader } from "@/components/common/Loader";
 
 const formSchema = z
   .object({
@@ -67,8 +67,8 @@ export const Register = () => {
         navigate("/login", { state: "register successfully" });
       }
     } catch (error) {
-      toast.error("Something went wrong");
       console.log(error);
+      handleError(error);
     }
   };
 

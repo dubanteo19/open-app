@@ -5,7 +5,6 @@ const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { darkMode } = useAppSelector((state) => state.settings);
-  console.log(darkMode);
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
