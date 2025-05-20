@@ -1,12 +1,12 @@
 import { Loader } from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { Post } from "@/types/post";
+import { LoaderIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGetPostsQuery } from "../api";
-import { Post } from "@/types/post";
 import { PostForm } from "../components/PostForm";
 import { PostList } from "../components/PostList";
-import { LoaderIcon } from "lucide-react";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 export const FeedPage = () => {
   const [page, setPage] = useState<number>(0);
@@ -14,24 +14,12 @@ export const FeedPage = () => {
     data: pageResponse,
     isLoading,
     isFetching,
-    refetch,
   } = useGetPostsQuery({
     page,
     size: 8,
   });
   const [posts, setPosts] = useState<Post[]>([]);
   const observerRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    const hasMissingSentiments = pageResponse?.content.some(
-      (p) => p.sentiment == -1,
-    );
-    if (hasMissingSentiments) {
-      const timeout = setTimeout(() => {
-        refetch();
-      }, 1500);
-      return () => clearTimeout(timeout);
-    }
-  }, [pageResponse, refetch]);
   useEffect(() => {
     if (pageResponse) {
       setPosts((prev) =>
@@ -67,7 +55,6 @@ export const FeedPage = () => {
         </Button>
         <Button className="flex-1" variant="ghost">
           Following
-          {isLoading ? "loading":"done"}
         </Button>
       </div>
       <div className="flex flex-col">

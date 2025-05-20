@@ -1,23 +1,23 @@
 import { Loader } from "@/components/common/Loader";
+import { Button } from "@/components/ui/button";
+import { RootState } from "@/shared/store";
+import {
+    activateSocketClient,
+    deactivateSocketClient,
+    getSocketClient,
+    subscribeWhenConnected,
+} from "@/shared/websocket";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 import { useGetCommentsByPostIdQuery } from "../../comment/api";
+import { CommentForm } from "../../comment/components/CommentForm";
 import { TypingIndicator } from "../../comment/components/TypingIndicator";
+import { CommentResponse } from "../../comment/dto/comment";
 import { useGetPostByIdQuery } from "../api";
 import { CommentList } from "../components/CommentList";
-import { useSelector } from "react-redux";
-import { RootState } from "@/shared/store";
-import { CommentForm } from "../../comment/components/CommentForm";
-import {
-  activateSocketClient,
-  deactivateSocketClient,
-  getSocketClient,
-  subscribeWhenConnected,
-} from "@/shared/websocket";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { CommentResponse } from "../../comment/dto/comment";
 import { PostItem } from "../components/PostItem";
 export const PostDetailPage = () => {
   const { postId } = useParams();

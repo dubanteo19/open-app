@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/shared/ApiRespnse";
+import { ApiResponse } from "@/shared/ApiResponse";
 import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";

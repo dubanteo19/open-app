@@ -1,13 +1,12 @@
 import { uuid } from "@/lib/utils";
-import { RootState } from "@/shared/store";
 import { Post } from "@/types/post";
-import { useSelector } from "react-redux";
 import { PostItem } from "./PostItem";
+import { useAppSelector } from "@/hooks/useAppDispatch";
 interface PostListProps {
   posts?: Post[];
 }
 export const PostList: React.FC<PostListProps> = ({ posts }) => {
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   return (
     <div className="flex flex-col px-2 w-full">
       {posts &&
