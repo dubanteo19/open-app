@@ -1,24 +1,32 @@
 import { extractData } from "@/lib/utils";
 import { baseQuery } from "@/shared/baseQuery";
+import {
+  CursorPagedRequest,
+  CursorPagedResponse,
+  PageRequest,
+  PageResponse,
+} from "@/types/page";
 import { Post, PostCreateRequset, PostUpdateRequset } from "@/types/post";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { PageRequest, PageResponse } from "@/types/page";
 export const postApi = createApi({
   reducerPath: "postApi",
   tagTypes: ["Post"],
   baseQuery: baseQuery,
   endpoints: (build) => ({
-    getPosts: build.query<PageResponse<Post>, PageRequest>({
+    getPosts: build.query<CursorPagedResponse<Post>, CursorPagedRequest>({
       query: (page) => ({
         url: `posts`,
-        params: page,
+        params: { after: page.after ?? undefined },
       }),
       transformResponse: extractData,
-      providesTags: ["Post"],
+      providesTags: (result) =>
+        result?.items
+          ? result.items.map((p) => ({ type: "Post" as const, id: p.id }))
+          : [],
     }),
     getPostById: build.query<Post, number>({
       query: (postId) => `/posts/${postId}`,
-      providesTags: ["Post"],
+      providesTags: (_, __, id) => [{ type: "Post", id }],
       transformResponse: extractData,
     }),
     getOpenerPosts: build.query<
@@ -32,7 +40,7 @@ export const postApi = createApi({
       providesTags: ["Post"],
       transformResponse: extractData,
     }),
-    createPost: build.mutation<string, PostCreateRequset>({
+    createPost: build.mutation<void, PostCreateRequset>({
       query: (body) => ({
         method: "post",
         url: "/posts",
@@ -40,7 +48,14 @@ export const postApi = createApi({
       }),
       invalidatesTags: ["Post"],
     }),
-    updatePost: build.mutation<string, PostUpdateRequset>({
+    viewPost: build.mutation<void, number>({
+      query: (postId) => ({
+        method: "POST",
+        url: `/posts/${postId}`,
+      }),
+      invalidatesTags: ["Post"],
+    }),
+    updatePost: build.mutation<void, PostUpdateRequset>({
       query: (body) => ({
         method: "put",
         url: "/posts",
@@ -64,4 +79,5 @@ export const {
   useDeletePostMutation,
   useUpdatePostMutation,
   useGetPostByIdQuery,
+  useViewPostMutation
 } = postApi;

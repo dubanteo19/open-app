@@ -1,5 +1,5 @@
 import { UserLayout } from "@/components/layout/UserLayout";
-import { ProtectedRoute } from "@/routes/ProutectedRoute";
+import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { Navigate, RouteObject } from "react-router-dom";
 import { NotificationsPage } from "./notifications/pages/NotificationsPage";
 import { ProfilePage } from "./profile/pages/ProfilePage";

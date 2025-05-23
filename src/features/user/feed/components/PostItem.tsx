@@ -1,20 +1,20 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { formatTime } from "@/lib/utils";
+import { cn, formatTime } from "@/lib/utils";
+import { AVATAR } from "@/shared/constant";
 import { Post } from "@/types/post";
 import { FaComment, FaEye, FaHeart } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { AuthorInfo } from "./AvatarInfo";
-export const PostItem: React.FC<Post & { isMine: boolean }> = ({
-  author,
-  id,
-  isMine,
-  content,
-  viewCount,
-  likeCount,
-  commentCount,
-  sentiment,
-  updatedAt,
+interface PostItemProps {
+  post: Post;
+  onToggleLike?: (postId: number) => void;
+  onDelete?: (postId: number) => void;
+}
+export const PostItem: React.FC<PostItemProps> = ({
+  post,
+  onToggleLike,
+  onDelete,
 }) => {
   const navigate = useNavigate();
   return (
@@ -24,40 +24,43 @@ export const PostItem: React.FC<Post & { isMine: boolean }> = ({
           <AvatarImage
             width={40}
             className="rounded-full"
-            src={
-              author.avatarUrl ||
-              "https://randomuser.me/api/portraits/men/9.jpg"
-            }
+            src={post.author.avatarUrl || AVATAR}
           />
         </Avatar>
       </div>
       <div className="col-span-11 flex flex-col">
         <AuthorInfo
-          isMine={isMine}
-          author={author}
-          content={content}
-          postId={id}
-          updatedAt={formatTime(updatedAt!)}
-          sentiment={sentiment}
+          isMine={post.mine}
+          author={post.author}
+          content={post.content}
+          postId={post.id}
+          updatedAt={formatTime(post.updatedAt!)}
+          sentiment={post.sentiment}
+          onDelete={onDelete}
         />
         <div
           className="lg:my-1 cursor-pointer wrap-break-word whitespace-pre-wrap"
-          onClick={() => navigate(`/${author.username}/post/${id}`)}
+          onClick={() => navigate(`/${post.author.username}/post/${post.id}`)}
         >
-          {content}
+          {post.content}
         </div>
         <div className="flex w-full">
-          <Button variant="ghost">
-            <FaHeart />
-            {likeCount || 0}
+          <Button variant="ghost" onClick={() => onToggleLike(post.id)}>
+            <FaHeart
+              className={cn(
+                "transition-all duration-300 ease-in ",
+                post.liked && "text-red-500 scale-110 ",
+              )}
+            />
+            {post.likeCount}
           </Button>
           <Button variant="ghost">
             <FaEye />
-            {viewCount || 0}
+            {post.viewCount}
           </Button>
           <Button variant="ghost">
             <FaComment />
-            {commentCount || 0}
+            {post.commentCount}
           </Button>
         </div>
       </div>

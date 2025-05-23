@@ -18,14 +18,16 @@ import { Dialog } from "@/components/ui/dialog";
 import { EditPostDialog } from "./EditPostDialog";
 import { useSelector } from "react-redux";
 import { RootState } from "@/shared/store";
-export const AuthorInfo: React.FC<{
+interface AuthorInfoProps {
   author: User;
   updatedAt?: string;
   content: string;
   postId: number;
   isMine: boolean;
   sentiment: number;
-}> = (props) => {
+  onDelete: (postId: number) => void;
+}
+export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
   const author = props.author;
   const { enableAI } = useSelector((state: RootState) => state.settings);
   const [showDialog, setShowDialog] = useState<boolean>(false);
@@ -37,6 +39,7 @@ export const AuthorInfo: React.FC<{
     try {
       await deletePost(props.postId).unwrap();
       toast.info("Post deleted");
+      props.onDelete(props.postId);
     } catch (error) {
       console.log("delete post failed ", error);
     }
@@ -64,7 +67,7 @@ export const AuthorInfo: React.FC<{
             <PopoverTrigger>
               <IoIosMore />
             </PopoverTrigger>
-            <PopoverContent className="w-35 z-40 bg-white rounded shadow-2xl">
+            <PopoverContent className="w-35 z-40 bg-white border rounded shadow-2xl">
               {props.isMine ? (
                 <div className="flex flex-col space-y-1 cursor-pointer">
                   <div

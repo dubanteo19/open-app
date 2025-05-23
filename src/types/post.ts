@@ -16,7 +16,9 @@ export interface Post {
   sentiment: number;
   content: string;
   updatedAt?: string;
-  likeCount?: number;
-  viewCount?: number;
-  commentCount?: number;
+  liked: boolean | false;
+  mine: boolean | false;
+  likeCount: number | 0;
+  viewCount: number | 0;
+  commentCount: number | 0;
 }

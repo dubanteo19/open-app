@@ -11,7 +11,7 @@ export const CommentItem: React.FC<CommentResponse> = (prop) => {
         <img className="w-full h-full" src={prop.author.avatarUrl} />
       </div>
       <div className="bg-gray-200/40 p-1 rounded-2xl">
-        <div className="flex justify-between space-x-3">
+        <div className="flex justify-between space-x-3 items-center">
           <Link to={`/profile/${prop.author.username}`}>
             <strong>{prop.author.username}</strong>
           </Link>
@@ -21,7 +21,6 @@ export const CommentItem: React.FC<CommentResponse> = (prop) => {
           <p className="break-words ">{prop.content}</p>
         </article>
         <div className="flex space-x-2">
-          <Button variant="link">Like</Button>
           <Button variant="link">Reply</Button>
         </div>
       </div>
