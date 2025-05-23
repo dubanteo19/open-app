@@ -99,7 +99,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
                   type="submit"
                   onClick={handleSubmit}
                 >
-                  Reply
+                  Comment
                 </Button>
               </div>
             </div>
