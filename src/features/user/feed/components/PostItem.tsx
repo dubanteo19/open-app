@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthorInfo } from "./AvatarInfo";
 interface PostItemProps {
   post: Post;
-  onToggleLike?: (postId: number) => void;
+  onToggleLike: (postId: number) => void;
   onDelete?: (postId: number) => void;
 }
 export const PostItem: React.FC<PostItemProps> = ({
@@ -33,10 +33,11 @@ export const PostItem: React.FC<PostItemProps> = ({
           isMine={post.mine}
           author={post.author}
           content={post.content}
+          bookmarked={post.bookmarked}
           postId={post.id}
           updatedAt={formatTime(post.updatedAt!)}
           sentiment={post.sentiment}
-          onDelete={onDelete}
+          onDelete={onDelete!}
         />
         <div
           className="lg:my-1 cursor-pointer wrap-break-word whitespace-pre-wrap"

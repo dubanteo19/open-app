@@ -4,10 +4,13 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { Post } from "@/types/post";
 import { LoaderIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useGetPostsQuery } from "../api";
+import {
+  useGetPostsQuery,
+  useLikePostMutation,
+  useUnlikePostMutation,
+} from "../api";
 import { PostForm } from "../components/PostForm";
 import { PostItem } from "../components/PostItem";
-import { useLikePostMutation, useUnlikeMutation } from "../../metadata/api";
 
 export const FeedPage = () => {
   const [after, setAfter] = useState<number | null>(null);
@@ -43,7 +46,7 @@ export const FeedPage = () => {
     setAfter(null);
   };
   const [likePost] = useLikePostMutation();
-  const [unlikePost] = useUnlikeMutation();
+  const [unlikePost] = useUnlikePostMutation();
 
   const handleDeletePost = (postId: number) => {
     setPosts((prev) => prev.filter((p) => p.id !== postId));

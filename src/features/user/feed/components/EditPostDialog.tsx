@@ -12,19 +12,24 @@ import { FaImage } from "react-icons/fa";
 import { MdEmojiEmotions } from "react-icons/md";
 import { useUpdatePostMutation } from "../api";
 import { Loader } from "lucide-react";
+import { toast } from "sonner";
 interface EditPostDialogProps {
   initialData: string;
   postId: number;
+  onEdit: () => void;
 }
 export const EditPostDialog: FC<EditPostDialogProps> = ({
   initialData,
   postId,
+  onEdit,
 }) => {
   const [content, setContent] = useState(initialData);
   const [editPost, { isLoading }] = useUpdatePostMutation();
   const handleOnSave = async () => {
     try {
-      await editPost({ postId, payload: { content } });
+      await editPost({ postId, payload: { content } }).unwrap();
+      toast.success("Update post successfully");
+      onEdit();
     } catch (error) {
       console.log(error);
     }

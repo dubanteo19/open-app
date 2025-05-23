@@ -1,16 +1,15 @@
-import { UserInfo } from "@/features/user/profile/component/UserInfo.tsx";
+import { Loader } from "@/components/common/Loader";
 import { Avatar } from "@/features/user/profile/component/Avatar.tsx";
 import { TabsWithIcon } from "@/features/user/profile/component/TabsWithIcon.tsx";
+import { UserInfo } from "@/features/user/profile/component/UserInfo.tsx";
+import { useAppSelector } from "@/hooks/useAppDispatch";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { Navigate, useParams } from "react-router-dom";
 import { useGetProfileQuery } from "../api";
-import { Loader } from "@/components/common/Loader";
-import { useSelector } from "react-redux";
-import { RootState } from "@/shared/store";
-import { skipToken } from "@reduxjs/toolkit/query";
 
 export const ProfilePage = () => {
   const { username } = useParams();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const { data: info, isLoading } = useGetProfileQuery(username ?? skipToken);
   if (isLoading) return <Loader />;
   if (!info) return <Navigate to={"/404"} />;

@@ -2,8 +2,12 @@ import { Loader } from "@/components/common/Loader";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { CommentSection } from "../../comment/components/CommentSection";
-import { useLikePostMutation, useUnlikeMutation } from "../../metadata/api";
-import { useGetPostByIdQuery, useViewPostMutation } from "../api";
+import {
+  useGetPostByIdQuery,
+  useLikePostMutation,
+  useUnlikePostMutation,
+  useViewPostMutation,
+} from "../api";
 import { PostItem } from "../components/PostItem";
 export const PostDetailPage = () => {
   const { postId } = useParams();
@@ -16,7 +20,7 @@ export const PostDetailPage = () => {
     triggerViewPost();
   }, [viewPost, postId]);
   const [likePost] = useLikePostMutation();
-  const [unlikePost] = useUnlikeMutation();
+  const [unlikePost] = useUnlikePostMutation();
   const handleLikeToggle = async (postId: number) => {
     const liked = post?.liked;
     const triggerUpdateLike = liked ? unlikePost : likePost;

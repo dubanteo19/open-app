@@ -2,11 +2,11 @@ import { User } from "@/types/user";
 export interface PostPayload {
   content: string;
 }
-export interface PostUpdateRequset {
+export interface PostUpdateRequest {
   postId?: number;
   payload: PostPayload;
 }
-export interface PostCreateRequset {
+export interface PostCreateRequest {
   openerId?: number;
   payload: PostPayload;
 }
@@ -17,6 +17,7 @@ export interface Post {
   content: string;
   updatedAt?: string;
   liked: boolean | false;
+  bookmarked: boolean | false;
   mine: boolean | false;
   likeCount: number | 0;
   viewCount: number | 0;
