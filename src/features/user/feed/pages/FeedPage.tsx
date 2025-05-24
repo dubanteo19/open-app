@@ -89,7 +89,7 @@ export const FeedPage = () => {
       <div className="flex flex-col">
         <PostForm onPostCreated={onPostCreated} />
         {posts.length > 0 && (
-          <div className="flex flex-col px-2 w-full">
+          <div className="flex flex-col w-full">
             {posts.map((post) => (
               <PostItem
                 post={post}
