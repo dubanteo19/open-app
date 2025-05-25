@@ -1,10 +1,13 @@
 import { Loader } from "@/components/common/Loader";
-import { toastError } from "@/features/user/feed/util";
 import { GoogleLogin } from "@react-oauth/google";
+import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGoogleLoginMutation } from "../api";
 
-export const GoogleLoginButton = () => {
+interface GoogleLoginButtonProps {
+  callback: (error: unknown) => void;
+}
+export const GoogleLoginButton: FC<GoogleLoginButtonProps> = ({ callback }) => {
   const [gooleLogin, { isLoading }] = useGoogleLoginMutation();
   const navigate = useNavigate();
   return (
@@ -16,7 +19,9 @@ export const GoogleLoginButton = () => {
             const re = gooleLogin({
               idToken: credentialResponse.credential,
             }).unwrap();
-            re.catch((error) => toastError(error));
+            re.catch((error) => {
+              callback(error);
+            });
             re.then(() => {
               navigate("/feed");
             });

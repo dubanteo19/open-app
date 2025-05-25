@@ -1,13 +1,29 @@
-import { uuid } from "@/lib/utils";
 import { Post } from "@/types/post";
 import { PostItem } from "./PostItem";
 interface PostListProps {
-  posts?: Post[];
+  posts: Post[];
+  handleLikeToggle: (postId: number) => void;
+  handleDelete: (postId: number) => void;
 }
-export const PostList: React.FC<PostListProps> = ({ posts }) => {
+export const PostList: React.FC<PostListProps> = ({
+  posts,
+  handleLikeToggle,
+  handleDelete,
+}) => {
   return (
-    <div className="flex flex-col px-2 w-full">
-      {posts && posts.map((post) => <PostItem {...post} key={uuid()} />)}
+    <div>
+      {posts.length > 0 && (
+        <div className="flex flex-col w-full">
+          {posts.map((post) => (
+            <PostItem
+              post={post}
+              onToggleLike={handleLikeToggle}
+              onDelete={handleDelete}
+              key={post.id}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

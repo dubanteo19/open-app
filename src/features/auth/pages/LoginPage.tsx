@@ -48,7 +48,7 @@ export const LoginPage = () => {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 ">
       {isLoading && <Loader />}
       <Card className="w-full max-w-md">
         <CardHeader>
@@ -64,9 +64,8 @@ export const LoginPage = () => {
         </CardHeader>
         <CardContent className="">
           <Form {...form}>
-            <GoogleLoginButton />
+            <GoogleLoginButton callback={(error) => toastError(error)} />
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {/* Dòng phân cách */}
               <div className="flex items-center my-4">
                 <div className="flex-grow h-px bg-gray-300" />
                 <span className="mx-3 text-gray-400 text-sm">or</span>

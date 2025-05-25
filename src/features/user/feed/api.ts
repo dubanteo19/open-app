@@ -1,27 +1,44 @@
-import { extractData } from "@/lib/utils";
+import { extractData, providePostTags } from "@/lib/utils";
 import { baseQuery } from "@/shared/baseQuery";
+import { POST_LIST_TAG, POST_TAG } from "@/shared/constant";
 import { CursorPagedRequest, CursorPagedResponse } from "@/types/page";
 import { Post, PostCreateRequest, PostUpdateRequest } from "@/types/post";
 import { createApi } from "@reduxjs/toolkit/query/react";
-const POST_TAG = "Post" as const;
+import { PostLike } from "./dto/response/PostLike";
 export const postApi = createApi({
   reducerPath: "postApi",
-  tagTypes: ["Post"],
+  tagTypes: ["Post", "PostLike", "PostBookmark"],
   baseQuery: baseQuery,
   endpoints: (build) => ({
-    getPosts: build.query<CursorPagedResponse<Post>, CursorPagedRequest>({
-      query: (page) => ({
-        url: `posts`,
-        params: { after: page.after ?? undefined },
+    getBookmarkedPosts: build.query<
+      CursorPagedResponse<Post>,
+      CursorPagedRequest
+    >({
+      query: (request) => ({
+        url: `openers/bookmarked-posts`,
+        params: { after: request.after ?? undefined },
       }),
       transformResponse: extractData,
-      providesTags: (result) =>
-        result?.items
-          ? [
-              ...result.items.map((p) => ({ type: POST_TAG, id: p.id })),
-              { type: "Post", id: "LIST" },
-            ]
-          : [{ type: "Post", id: "LIST" }],
+      providesTags: ["PostBookmark"],
+    }),
+    getPostsByAuthor: build.query<
+      CursorPagedResponse<Post>,
+      CursorPagedRequest<{ username: string }>
+    >({
+      query: (request) => ({
+        url: `openers/${request.args.username}/posts`,
+        params: { after: request.after ?? undefined },
+      }),
+      transformResponse: extractData,
+      providesTags: providePostTags,
+    }),
+    getPosts: build.query<CursorPagedResponse<Post>, CursorPagedRequest>({
+      query: (request) => ({
+        url: `posts`,
+        params: { after: request.after ?? undefined },
+      }),
+      transformResponse: extractData,
+      providesTags: providePostTags,
     }),
     getPostById: build.query<Post, number>({
       query: (postId) => `/posts/${postId}`,
@@ -34,7 +51,7 @@ export const postApi = createApi({
         url: "/posts",
         body: body,
       }),
-      invalidatesTags: [{ type: "Post", id: "LIST" }],
+      invalidatesTags: [POST_LIST_TAG],
     }),
     viewPost: build.mutation<void, number>({
       query: (postId) => ({
@@ -51,7 +68,7 @@ export const postApi = createApi({
       }),
       invalidatesTags: (_, __, body) => [
         { type: POST_TAG, id: body.postId },
-        { type: POST_TAG, id: "LIST" },
+        POST_LIST_TAG,
       ],
     }),
     deletePost: build.mutation<void, number>({
@@ -61,29 +78,47 @@ export const postApi = createApi({
       }),
       invalidatesTags: (_, __, postId) => [
         { type: POST_TAG, id: postId },
-        { type: POST_TAG, id: "LIST" },
+        POST_LIST_TAG,
       ],
+    }),
+    getPostLikes: build.query<PostLike[], number>({
+      query: (postId) => `/posts/${postId}/meta/post-likes`,
+      transformResponse: extractData,
+      providesTags: ["PostLike"],
     }),
     likePost: build.mutation<void, number>({
       query: (postId) => ({
         method: "POST",
         url: `/posts/${postId}/meta/like`,
       }),
-      invalidatesTags: (_, __, postId) => [{ type: POST_TAG, id: postId }],
+      invalidatesTags: (_, __, postId) => [
+        { type: POST_TAG, id: postId },
+        "PostLike",
+      ],
     }),
     unlikePost: build.mutation<void, number>({
       query: (postId) => ({
         method: "DELETE",
         url: `/posts/${postId}/meta/unlike`,
       }),
-      invalidatesTags: (_, __, postId) => [{ type: POST_TAG, id: postId }],
+      invalidatesTags: (_, __, postId) => [
+        { type: POST_TAG, id: postId },
+        "PostLike",
+      ],
     }),
     bookmark: build.mutation<void, number>({
       query: (postId) => ({
         method: "POST",
         url: `/posts/${postId}/meta/bookmark`,
       }),
-      invalidatesTags: (_, __, postId) => [{ type: POST_TAG, id: postId }],
+      invalidatesTags: (_, __, postId) => [{ type: POST_TAG, id: postId },"PostBookmark"],
+    }),
+    unbookmark: build.mutation<void, number>({
+      query: (postId) => ({
+        method: "DELETE",
+        url: `/posts/${postId}/meta/unbookmark`,
+      }),
+      invalidatesTags: (_, __, postId) => [{ type: POST_TAG, id: postId },"PostBookmark"],
     }),
   }),
 });
@@ -97,4 +132,8 @@ export const {
   useLikePostMutation,
   useUnlikePostMutation,
   useBookmarkMutation,
+  useUnbookmarkMutation,
+  useGetPostsByAuthorQuery,
+  useGetBookmarkedPostsQuery,
+  useGetPostLikesQuery,
 } = postApi;

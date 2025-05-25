@@ -1,5 +1,7 @@
 import { AlertDialog } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { RootState } from "@/shared/store";
 import { User } from "@/types/user";
 import {
@@ -7,19 +9,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
-import { BookmarkIcon, EditIcon, TrashIcon } from "lucide-react";
+import { EditIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
+import { FaBookmark } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
-import { MdVerified } from "react-icons/md";
+import { MdReport, MdVerified } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { useBookmarkMutation, useDeletePostMutation } from "../api";
+import {
+  useBookmarkMutation,
+  useDeletePostMutation,
+  useUnbookmarkMutation,
+} from "../api";
 import { Sentitment } from "../components/Sentitment";
 import { DeleteConfirmDialog } from "./diaglogs/DeleteConfirmDialog";
 import { EditPostDialog } from "./EditPostDialog";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 interface AuthorInfoProps {
   author: User;
   updatedAt?: string;
@@ -32,12 +37,15 @@ interface AuthorInfoProps {
 }
 export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
   const author = props.author;
+  const [localBookmark, setLocalBookmark] = useState<boolean>(props.bookmarked);
   const { enableAI } = useSelector((state: RootState) => state.settings);
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const toggleShowDialog = () => setShowDialog((prev) => !prev);
   const toggleShowEditDialog = () => setShowEditDialog((prev) => !prev);
   const [deletePost, { isLoading }] = useDeletePostMutation();
+  const [bookmarkPost] = useBookmarkMutation();
+  const [unbookmarkPost] = useUnbookmarkMutation();
   const handleConfirmDelete = async () => {
     try {
       await deletePost(props.postId).unwrap();
@@ -47,10 +55,12 @@ export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
       console.log("delete post failed ", error);
     }
   };
-  const [bookmarkPost] = useBookmarkMutation();
   const handleBookmark = async () => {
     try {
-      await bookmarkPost(props.postId).unwrap();
+      const mutation = localBookmark ? unbookmarkPost : bookmarkPost;
+      mutation(props.postId).unwrap();
+      toast.success("Bookmarked post updated");
+      setLocalBookmark((prev) => !prev);
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +80,7 @@ export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
         </Link>
       </div>
       <div>
-        <div className="mr-4 flex space-x-2 ">
+        <div className="mr-4 flex space-x-2  ">
           {enableAI && props.sentiment > -1 && (
             <Sentitment sentiment={props.sentiment} />
           )}
@@ -78,30 +88,53 @@ export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
             <PopoverTrigger>
               <IoIosMore />
             </PopoverTrigger>
-            <PopoverContent className=" z-40 bg-white border rounded shadow-2xl">
+            <PopoverContent className=" z-40   bg-white border rounded shadow-2xl">
               {props.isMine ? (
-                <div className="flex flex-col space-y-1 cursor-pointer">
-                  <Button onClick={toggleShowEditDialog} variant={"ghost"}>
+                <div className="flex flex-col ">
+                  <Button
+                    onClick={toggleShowEditDialog}
+                    variant={"ghost"}
+                    className=" justify-start"
+                  >
                     <EditIcon />
-                    Edit
+                    Edit Post
                   </Button>
-                  <Button onClick={toggleShowDialog} variant={"ghost"}>
+                  <Button
+                    onClick={toggleShowDialog}
+                    className=" justify-start"
+                    variant={"ghost"}
+                  >
                     <TrashIcon />
-                    Delete
+                    Delete Post
+                  </Button>
+                  <Button
+                    onClick={handleBookmark}
+                    className=" justify-start"
+                    variant={"ghost"}
+                  >
+                    <FaBookmark
+                      className={cn(localBookmark && "text-yellow-500")}
+                    />
+                    Bookmark Post
                   </Button>
                 </div>
               ) : (
-                <Button
-                  onClick={handleBookmark}
-                  disabled={props.bookmarked}
-                  variant={"ghost"}
-                  className="flex cursor-pointer"
-                >
-                  <BookmarkIcon
-                    className={cn(props.bookmarked && "text-yellow-500")}
-                  />
-                  Bookmark
-                </Button>
+                <div>
+                  <Button
+                    onClick={handleBookmark}
+                    variant={"ghost"}
+                    className="flex "
+                  >
+                    <FaBookmark
+                      className={cn(localBookmark && "text-yellow-500")}
+                    />
+                    Bookmark Post
+                  </Button>
+                  <Button variant={"ghost"} className="flex ">
+                    <MdReport className="text-error" />
+                    Report Post
+                  </Button>
+                </div>
               )}
             </PopoverContent>
           </Popover>
