@@ -2,8 +2,9 @@ import { useState } from "react";
 
 import { useParams } from "react-router-dom";
 import { Loader } from "@/components/common/Loader";
-import { useGetOpenerPostsQuery } from "../../feed/api";
 import { PostList } from "../../feed/components/PostList";
+import { PostItem } from "../../feed/components/PostItem";
+import { useGetOpenerPostsQuery } from "../api";
 
 function Tweets() {
   return <PostList />;
@@ -58,7 +59,17 @@ export function TabsWithIcon() {
         })}
       </div>
       <div className="my-2 w-full">{tabs[activeTab].content}</div>
-      {posts && <PostList posts={posts.content} />}
+      {posts?.content && (
+        <div className="flex flex-col px-2 w-full">
+          {posts.content.map((post) => (
+            <PostItem
+              onToggleLike={(postId: number) => alert("You liked" + postId)}
+              post={post}
+              key={post.id}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

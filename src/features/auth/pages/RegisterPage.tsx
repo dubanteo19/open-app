@@ -9,7 +9,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { handleError } from "@/features/user/feed/util";
+import { handleError, toastError } from "@/features/user/feed/util";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -68,7 +68,7 @@ export const Register = () => {
       }
     } catch (error) {
       console.log(error);
-      handleError(error);
+      toastError(error);
     }
   };
 

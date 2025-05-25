@@ -46,13 +46,9 @@ export const PostForm: FC<PostFormProps> = ({ onPostCreated }) => {
     <div className="grid grid-cols-12 p-3 border-t-2 border-t-gray-200">
       {isLoading && <Loader />}
       <div className="col-span-1">
-        <Avatar>
-          <AvatarImage
-            width={40}
-            className="rounded-full"
-            src={user?.avatarUrl}
-          />
-        </Avatar>
+        <div className="rounded-full overflow-hidden size-12">
+          <img src={user?.avatarUrl} />
+        </div>
       </div>
       <div className="col-span-11 flex flex-col">
         <div className="border-b-2 border-b-gray-200">

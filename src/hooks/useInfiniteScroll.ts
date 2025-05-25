@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 type UseInfiniteScrollOptions = {
   callback: () => void;
-  hasMore: boolean;
+  hasMore?: boolean;
   isFetching: boolean;
 };
 export const useInfiniteScroll = (

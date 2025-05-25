@@ -1,44 +1,68 @@
 import { AlertDialog } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import { RootState } from "@/shared/store";
 import { User } from "@/types/user";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@radix-ui/react-popover";
-import { BookmarkIcon, EditIcon, TrashIcon } from "lucide-react";
+import { EditIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
+import { FaBookmark } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
-import { MdVerified } from "react-icons/md";
+import { MdReport, MdVerified } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { useDeletePostMutation } from "../api";
+import {
+  useBookmarkMutation,
+  useDeletePostMutation,
+  useUnbookmarkMutation,
+} from "../api";
 import { Sentitment } from "../components/Sentitment";
 import { DeleteConfirmDialog } from "./diaglogs/DeleteConfirmDialog";
-import { Dialog } from "@/components/ui/dialog";
 import { EditPostDialog } from "./EditPostDialog";
-import { useSelector } from "react-redux";
-import { RootState } from "@/shared/store";
-export const AuthorInfo: React.FC<{
+interface AuthorInfoProps {
   author: User;
   updatedAt?: string;
   content: string;
   postId: number;
   isMine: boolean;
   sentiment: number;
-}> = (props) => {
+  bookmarked: boolean;
+  onDelete: (postId: number) => void;
+}
+export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
   const author = props.author;
+  const [localBookmark, setLocalBookmark] = useState<boolean>(props.bookmarked);
   const { enableAI } = useSelector((state: RootState) => state.settings);
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const toggleShowDialog = () => setShowDialog((prev) => !prev);
   const toggleShowEditDialog = () => setShowEditDialog((prev) => !prev);
   const [deletePost, { isLoading }] = useDeletePostMutation();
+  const [bookmarkPost] = useBookmarkMutation();
+  const [unbookmarkPost] = useUnbookmarkMutation();
   const handleConfirmDelete = async () => {
     try {
       await deletePost(props.postId).unwrap();
       toast.info("Post deleted");
+      props.onDelete(props.postId);
     } catch (error) {
       console.log("delete post failed ", error);
+    }
+  };
+  const handleBookmark = async () => {
+    try {
+      const mutation = localBookmark ? unbookmarkPost : bookmarkPost;
+      mutation(props.postId).unwrap();
+      toast.success("Bookmarked post updated");
+      setLocalBookmark((prev) => !prev);
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -56,7 +80,7 @@ export const AuthorInfo: React.FC<{
         </Link>
       </div>
       <div>
-        <div className="mr-4 flex space-x-2 ">
+        <div className="mr-4 flex space-x-2  ">
           {enableAI && props.sentiment > -1 && (
             <Sentitment sentiment={props.sentiment} />
           )}
@@ -64,37 +88,63 @@ export const AuthorInfo: React.FC<{
             <PopoverTrigger>
               <IoIosMore />
             </PopoverTrigger>
-            <PopoverContent className="w-35 z-40 bg-white rounded shadow-2xl">
+            <PopoverContent className=" z-40   bg-white border rounded shadow-2xl">
               {props.isMine ? (
-                <div className="flex flex-col space-y-1 cursor-pointer">
-                  <div
+                <div className="flex flex-col ">
+                  <Button
                     onClick={toggleShowEditDialog}
-                    className="flex items-center p-1 space-x-2 hover:bg-gray-500/20"
+                    variant={"ghost"}
+                    className=" justify-start"
                   >
                     <EditIcon />
-                    <p>Edit post</p>
-                  </div>
-                  <div
+                    Edit Post
+                  </Button>
+                  <Button
                     onClick={toggleShowDialog}
-                    className="flex items-center p-1 space-x-2 hover:bg-gray-500/20"
+                    className=" justify-start"
+                    variant={"ghost"}
                   >
                     <TrashIcon />
-                    <p>Delete post</p>
-                  </div>
+                    Delete Post
+                  </Button>
+                  <Button
+                    onClick={handleBookmark}
+                    className=" justify-start"
+                    variant={"ghost"}
+                  >
+                    <FaBookmark
+                      className={cn(localBookmark && "text-yellow-500")}
+                    />
+                    Bookmark Post
+                  </Button>
                 </div>
               ) : (
-                <div className="flex flex-col space-y-1 cursor-pointer">
-                  <div className="flex items-center p-1 space-x-2 hover:bg-gray-500/20">
-                    <BookmarkIcon />
-                    <p>Saved post</p>
-                  </div>
+                <div>
+                  <Button
+                    onClick={handleBookmark}
+                    variant={"ghost"}
+                    className="flex "
+                  >
+                    <FaBookmark
+                      className={cn(localBookmark && "text-yellow-500")}
+                    />
+                    Bookmark Post
+                  </Button>
+                  <Button variant={"ghost"} className="flex ">
+                    <MdReport className="text-error" />
+                    Report Post
+                  </Button>
                 </div>
               )}
             </PopoverContent>
           </Popover>
         </div>
         <Dialog open={showEditDialog} onOpenChange={toggleShowEditDialog}>
-          <EditPostDialog initialData={props.content} postId={props.postId} />
+          <EditPostDialog
+            onEdit={toggleShowEditDialog}
+            initialData={props.content}
+            postId={props.postId}
+          />
         </Dialog>
         <AlertDialog open={showDialog} onOpenChange={toggleShowDialog}>
           <DeleteConfirmDialog

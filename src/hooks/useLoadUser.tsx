@@ -1,12 +1,11 @@
 import { useAuthMeQuery } from "@/features/auth/api";
 import { logout, setUser } from "@/features/auth/slice";
-import { RootState } from "@/shared/store";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "./useAppDispatch";
 
 export function useLoadUserFromToken() {
-  const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
   const token = localStorage.getItem("accessToken");
   const { data, isLoading, isError, isSuccess } = useAuthMeQuery(undefined, {
     skip: !token || !!user,

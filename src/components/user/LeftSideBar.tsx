@@ -1,13 +1,11 @@
 import { cn, uuid } from "@/lib/utils";
 import React, { ReactNode } from "react";
-import { GoHomeFill } from "react-icons/go";
 import { FaHashnode, FaUser } from "react-icons/fa6";
-import { IoNotificationsSharp, IoMail, IoBookmark } from "react-icons/io5";
+import { GoHomeFill } from "react-icons/go";
 import { IoIosMore } from "react-icons/io";
+import { IoBookmark, IoMail, IoNotificationsSharp } from "react-icons/io5";
 
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Button } from "../ui/button";
-import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/features/auth/slice";
 import { RootState } from "@/shared/store";
 import {
   DropdownMenu,
@@ -16,7 +14,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { logout } from "@/features/auth/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
 interface SideBarLinkProps {
   href: string;
   name: string;

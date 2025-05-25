@@ -1,24 +1,22 @@
+import { Loader } from "@/components/common/Loader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toastError } from "@/features/user/feed/util";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
-
-import { Loader } from "@/components/common/Loader";
-import { toastError } from "@/features/user/feed/util";
-import { toast } from "sonner";
 import { useLoginMutation } from "../api";
 import { GoogleLoginButton } from "../components/GoogleLoginButton";
 
@@ -31,23 +29,16 @@ const schema = z.object({
     .min(6, { message: "Password must be at least 6 characters" }),
 });
 
-type FormData = z.infer<typeof schema>;
+type LoginSchema = z.infer<typeof schema>;
 
 export const LoginPage = () => {
-  const location = useLocation();
-  const message = location.state;
-  useEffect(() => {
-    if (message) {
-      toast.info(message);
-    }
-  }, [message]);
-  const form = useForm<FormData>({
+  const form = useForm<LoginSchema>({
     resolver: zodResolver(schema),
   });
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: LoginSchema) => {
     try {
       const res = await login(data).unwrap();
       if (res) navigate("/feed");
@@ -57,7 +48,7 @@ export const LoginPage = () => {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 ">
       {isLoading && <Loader />}
       <Card className="w-full max-w-md">
         <CardHeader>
@@ -73,9 +64,8 @@ export const LoginPage = () => {
         </CardHeader>
         <CardContent className="">
           <Form {...form}>
-            <GoogleLoginButton />
+            <GoogleLoginButton callback={(error) => toastError(error)} />
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              {/* Dòng phân cách */}
               <div className="flex items-center my-4">
                 <div className="flex-grow h-px bg-gray-300" />
                 <span className="mx-3 text-gray-400 text-sm">or</span>

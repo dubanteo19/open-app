@@ -7,6 +7,7 @@ interface Props {
 }
 export const ProtectedRoute: React.FC<Props> = ({ children }) => {
   const { isLoading, isSuccess, user } = useLoadUserFromToken();
+
   if (isLoading) {
     return <Loader />;
   } else if (!user && !isSuccess) {

@@ -20,7 +20,6 @@ export const authApi = createApi({
         body,
       }),
     }),
-
     googleLogin: build.mutation<LoginResponse, GoogleLoginRequest>({
       query: ({ idToken }) => ({
         method: "POST",
