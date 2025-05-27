@@ -4,11 +4,13 @@ interface PostListProps {
   posts: Post[];
   handleLikeToggle: (postId: number) => void;
   handleDelete: (postId: number) => void;
+  handleEdit: (postId: number, newContent: string) => void;
 }
 export const PostList: React.FC<PostListProps> = ({
   posts,
   handleLikeToggle,
   handleDelete,
+  handleEdit,
 }) => {
   return (
     <div>
@@ -19,6 +21,7 @@ export const PostList: React.FC<PostListProps> = ({
               post={post}
               onToggleLike={handleLikeToggle}
               onDelete={handleDelete}
+              onEdit={handleEdit}
               key={post.id}
             />
           ))}

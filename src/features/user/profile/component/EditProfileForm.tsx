@@ -24,9 +24,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { useUpdateProfileMutation } from "../api";
-import { toast } from "sonner";
 const formSchema = z.object({
   displayName: z
     .string()
@@ -42,11 +42,9 @@ interface EditProfileFormProps {
   displayName: string;
   location: string;
   bio: string;
-  openerId: number;
   onSave: () => void;
 }
 export const EditProfileForm: FC<EditProfileFormProps> = ({
-  openerId,
   displayName,
   bio,
   location,
@@ -55,10 +53,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   const handleUpdateProfile = async (data: FormSchema) => {
     try {
-      updateProfile({
-        ...data,
-        openerId,
-      }).unwrap();
+      updateProfile(data).unwrap();
       onSave();
       toast.success("Update profile successfully");
     } catch (error) {

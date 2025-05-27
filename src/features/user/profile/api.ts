@@ -20,7 +20,7 @@ export const openerApi = createApi({
       query: (q) => `/images?q=${q}`,
       transformResponse: extractData,
     }),
-    updateAvatar: build.mutation<OpenerDetail, OpenerUpdateAvatarRequest>({
+    updateAvatar: build.mutation<void, OpenerUpdateAvatarRequest>({
       query: (body) => ({
         url: `/openers/${body.openerId}/avatar`,
         method: "PUT",
@@ -29,9 +29,9 @@ export const openerApi = createApi({
       transformResponse: extractData,
       invalidatesTags: ["Opener"],
     }),
-    updateProfile: build.mutation<OpenerDetail, OpenerUpdateRequest>({
+    updateProfile: build.mutation<void, OpenerUpdateRequest>({
       query: (body) => ({
-        url: `/openers/${body.openerId}`,
+        url: "/openers",
         method: "PUT",
         body: body,
       }),

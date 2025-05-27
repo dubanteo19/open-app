@@ -1,11 +1,11 @@
-import { FC } from "react";
-import { useGetPostLikesQuery } from "../api";
-import { Loader } from "lucide-react";
-import { FaDice, FaHeart } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
-import { PostLike } from "../dto/response/PostLike";
-import { formatTime } from "@/lib/utils";
+import { FollowButton } from "@/components/common/FollowButton";
 import { DialogContent } from "@/components/ui/dialog";
+import { formatTime } from "@/lib/utils";
+import { Loader } from "lucide-react";
+import { FC } from "react";
+import { FaHeart } from "react-icons/fa";
+import { useGetPostLikesQuery } from "../api";
+import { PostLike } from "../dto/response/PostLike";
 
 const PostLikeItem: FC<PostLike> = ({ likedBy, likedAt }) => {
   return (
@@ -13,7 +13,7 @@ const PostLikeItem: FC<PostLike> = ({ likedBy, likedAt }) => {
       <div className="flex  space-x-2">
         <div className="relative">
           <div className="size-12 overflow-hidden rounded-full">
-            <img src={likedBy.avatarUrl} />
+            <img className="w-full h-full" src={likedBy.avatarUrl} />
           </div>
           <FaHeart className=" absolute bottom-[-5px] right-0 duration-300  text-red-500 animate-pulse" />
         </div>
@@ -24,10 +24,7 @@ const PostLikeItem: FC<PostLike> = ({ likedBy, likedAt }) => {
           <p>@{likedBy.username}</p>
         </div>
       </div>
-      <Button variant={"outline"}>
-        <FaDice />
-        Following
-      </Button>
+      <FollowButton followed={false} targetOpenerId={0} />
     </div>
   );
 };

@@ -12,15 +12,6 @@ export const newsItems: NewsCardProps[] = [
       "https://media.cnn.com/api/v1/images/stellar/prod/2025-04-11t002945z-1033643131-rc2cvdaf55pc-rtrmadp-3-new-york-crash-helicopter.jpg?c=16x9&q=h_653,w_1160,c_fill/f_webp",
   },
   {
-    id: 2,
-    topic: "Health",
-    dateTime: "1h ago",
-    title: "New Vaccine Shows Promise in Clinical Trials",
-    hashTag: "#Health",
-    thumbnail:
-      "https://hms.harvard.edu/sites/default/files/2025-02/850%20vaccine.jpg",
-  },
-  {
     id: 3,
     topic: "Sports",
     dateTime: "last night",

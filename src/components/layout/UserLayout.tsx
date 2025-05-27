@@ -9,7 +9,7 @@ export const UserLayout = () => {
         <LeftSideBar />
       </div>
       <div className="w-full lg:ml-[290px] ">
-        <div className="lg:mr-[350px] border-x-gray-500/20 border-l-2">
+        <div className="lg:mr-[350px] border-x-gray-500/20 border-l-2 min-h-screen">
           <Outlet />
         </div>
         <div className="hidden lg:block fixed top-0 right-40 h-screen w-[300px] ">

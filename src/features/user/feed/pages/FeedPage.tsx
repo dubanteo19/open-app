@@ -12,8 +12,9 @@ export const FeedPage = () => {
     isLoading,
     isFetching,
     handleLikeToggle,
+    handleEditPost,
     handleDeletePost,
-    refetch
+    refetch,
   } = usePaginatedPosts(useGetPostsQuery, {});
   if (isLoading) return <Loader />;
   return (
@@ -33,6 +34,7 @@ export const FeedPage = () => {
         <PostForm onPostCreated={refetch} />
         <PostList
           posts={posts}
+          handleEdit={handleEditPost}
           handleDelete={handleDeletePost}
           handleLikeToggle={handleLikeToggle}
         />

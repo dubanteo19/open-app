@@ -1,19 +1,19 @@
 import { Loader } from "@/components/common/Loader";
+import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { logout } from "@/features/auth/slice";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
+import { ErrorCode } from "@/shared/errorCode";
 import { RootState } from "@/shared/store";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { FC, useState } from "react";
 import { FaImage } from "react-icons/fa6";
 import { MdEmojiEmotions } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { useCreatePostMutation } from "../api";
 import { handleError } from "../util";
-import { AlertDialog } from "@/components/ui/alert-dialog";
 import { ErrorAlertDialog } from "./diaglogs/ErrorAlertDialog";
-import { ErrorCode } from "@/shared/errorCode";
-import { useAppDispatch } from "@/hooks/useAppDispatch";
-import { logout } from "@/features/auth/slice";
+import { AVATAR } from "@/shared/constant";
 
 interface PostFormProps {
   onPostCreated: () => void;
@@ -47,7 +47,7 @@ export const PostForm: FC<PostFormProps> = ({ onPostCreated }) => {
       {isLoading && <Loader />}
       <div className="col-span-1">
         <div className="rounded-full overflow-hidden size-12">
-          <img src={user?.avatarUrl} />
+          <img className="w-full h-full" src={user?.avatarUrl || AVATAR} />
         </div>
       </div>
       <div className="col-span-11 flex flex-col">
