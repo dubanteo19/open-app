@@ -14,19 +14,26 @@ export const ProfilePage = () => {
   const { username } = useParams<{ username: string }>();
   const { user } = useAppSelector((state) => state.auth);
   const { data: info, isLoading } = useGetProfileQuery(username ?? skipToken);
-  const { posts, observerRef, isFetching, handleLikeToggle, handleDeletePost } =
-    usePaginatedPosts<{ username: string }>(useGetPostsByAuthorQuery, {
-      username: username!,
-    });
+  const {
+    posts,
+    observerRef,
+    isFetching,
+    handleLikeToggle,
+    handleDeletePost,
+    handleEditPost,
+  } = usePaginatedPosts<{ username: string }>(useGetPostsByAuthorQuery, {
+    username: username!,
+  });
   if (isLoading) return <Loader />;
   if (!info) return <Navigate to={"/404"} />;
   return (
     <div>
-      <div className="pb-4">
+      <div className="pb-4 ">
         <Avatar
           isMine={username == user?.username}
           displayName={info.summary.displayName}
           location={info.location}
+          followed={info.followed}
           bio={info.bio}
           openerId={info.summary.id}
           avatarUrl={info.summary.avatarUrl}
@@ -37,6 +44,7 @@ export const ProfilePage = () => {
             posts={posts}
             handleDelete={handleDeletePost}
             handleLikeToggle={handleLikeToggle}
+            handleEdit={handleEditPost}
           />
           <div ref={observerRef} className="flex-center h-10 my-4">
             {isFetching && <LoaderIcon className="animate-spin" />}

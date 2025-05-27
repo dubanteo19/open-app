@@ -51,6 +51,19 @@ export const usePaginatedPosts = <T extends Record<string, unknown>>(
   const handleDeletePost = (postId: number) => {
     setPosts((prev) => prev.filter((p) => p.id !== postId));
   };
+
+  const handleEditPost = (postId: number, newContent: string) => {
+    setPosts((prev) =>
+      prev.map((p) =>
+        p.id === postId
+          ? {
+              ...p,
+              content: newContent,
+            }
+          : p,
+      ),
+    );
+  };
   const handleLikeToggle = async (postId: number) => {
     const selectedPost = posts.find((p) => p.id === postId);
     const liked = selectedPost?.liked;
@@ -83,6 +96,7 @@ export const usePaginatedPosts = <T extends Record<string, unknown>>(
     observerRef,
     handleDeletePost,
     handleLikeToggle,
+    handleEditPost,
     refetch,
   };
 };

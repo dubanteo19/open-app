@@ -34,6 +34,7 @@ interface AuthorInfoProps {
   sentiment: number;
   bookmarked: boolean;
   onDelete: (postId: number) => void;
+  onEdit: (postId: number, newContent: string) => void;
 }
 export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
   const author = props.author;
@@ -42,7 +43,10 @@ export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const toggleShowDialog = () => setShowDialog((prev) => !prev);
-  const toggleShowEditDialog = () => setShowEditDialog((prev) => !prev);
+  const toggleShowEditDialog = (postId: number, newContent: string) => {
+    setShowEditDialog((prev) => !prev);
+    props.onEdit(postId, newContent);
+  };
   const [deletePost, { isLoading }] = useDeletePostMutation();
   const [bookmarkPost] = useBookmarkMutation();
   const [unbookmarkPost] = useUnbookmarkMutation();
@@ -92,7 +96,7 @@ export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
               {props.isMine ? (
                 <div className="flex flex-col ">
                   <Button
-                    onClick={toggleShowEditDialog}
+                    onClick={() => setShowEditDialog((prev) => !prev)}
                     variant={"ghost"}
                     className=" justify-start"
                   >
@@ -139,7 +143,7 @@ export const AuthorInfo: React.FC<AuthorInfoProps> = (props) => {
             </PopoverContent>
           </Popover>
         </div>
-        <Dialog open={showEditDialog} onOpenChange={toggleShowEditDialog}>
+        <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
           <EditPostDialog
             onEdit={toggleShowEditDialog}
             initialData={props.content}

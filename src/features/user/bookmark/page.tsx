@@ -12,12 +12,14 @@ export const BookMarkPage = () => {
     isFetching,
     handleLikeToggle,
     handleDeletePost,
+    handleEditPost,
   } = usePaginatedPosts(useGetBookmarkedPostsQuery, {});
   if (isLoading) return <Loader />;
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       <h3>Bookmarked Posts</h3>
       <PostList
+        handleEdit={handleEditPost}
         posts={posts}
         handleDelete={handleDeletePost}
         handleLikeToggle={handleLikeToggle}

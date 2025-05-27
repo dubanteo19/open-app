@@ -13,11 +13,13 @@ interface PostItemProps {
   post: Post;
   onToggleLike: (postId: number) => void;
   onDelete?: (postId: number) => void;
+  onEdit: (postId: number, newContent: string) => void;
 }
 export const PostItem: React.FC<PostItemProps> = ({
   post,
   onToggleLike,
   onDelete,
+  onEdit,
 }) => {
   const navigate = useNavigate();
   const [showPostLike, setShowPostLike] = useState<boolean>(false);
@@ -44,6 +46,7 @@ export const PostItem: React.FC<PostItemProps> = ({
           postId={post.id}
           updatedAt={formatTime(post.updatedAt!)}
           sentiment={post.sentiment}
+          onEdit={onEdit}
           onDelete={onDelete!}
         />
         <div className="lg:my-1  wrap-break-word py-2 whitespace-pre-wrap">

@@ -16,7 +16,7 @@ import { toast } from "sonner";
 interface EditPostDialogProps {
   initialData: string;
   postId: number;
-  onEdit: () => void;
+  onEdit: (postId: number, newContent: string) => void;
 }
 export const EditPostDialog: FC<EditPostDialogProps> = ({
   initialData,
@@ -29,7 +29,7 @@ export const EditPostDialog: FC<EditPostDialogProps> = ({
     try {
       await editPost({ postId, payload: { content } }).unwrap();
       toast.success("Update post successfully");
-      onEdit();
+      onEdit(postId, content);
     } catch (error) {
       console.log(error);
     }

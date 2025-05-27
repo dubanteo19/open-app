@@ -17,6 +17,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
+import { AVATAR } from "@/shared/constant";
 interface SideBarLinkProps {
   href: string;
   name: string;
@@ -97,7 +98,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
       <div className="flex space-x-2 justify-between items-center">
         <div className="flex  space-x-2 items-center">
           <div className="w-10 h-10 rounded-full overflow-hidden ">
-            <img className="w-full h-full" src={user?.avatarUrl} />
+            <img className="w-full h-full" src={user?.avatarUrl ||AVATAR} />
           </div>
           <div className="flex flex-col">
             <h4 className="font-bold">{user?.displayName}</h4>
@@ -110,7 +111,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
           <DropdownMenuTrigger>
             <IoIosMore />
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="z-10 ">
             <DropdownMenuLabel>My account</DropdownMenuLabel>
             <DropdownMenuItem>
               <Button variant="ghost" onClick={handleLogout}>
