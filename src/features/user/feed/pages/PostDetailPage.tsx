@@ -34,7 +34,15 @@ export const PostDetailPage = () => {
   if (isLoading) return <Loader />;
   return (
     <div className="flex flex-col space-y-2  mb-20 min-h-screen">
-      {post && <PostItem onToggleLike={handleLikeToggle} post={post} />}
+      {post && (
+        <PostItem
+          onToggleLike={handleLikeToggle}
+          post={post}
+          onEdit={function (postId: number, newContent: string): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
+      )}
       {post && (
         <CommentSection
           postAuthorName={post.author.username}

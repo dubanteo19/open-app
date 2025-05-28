@@ -45,7 +45,7 @@ export const FollowPage = () => {
         </Link>
       </div>
       <div className="flex flex-col space-y-2">
-        {data && data?.content.length > 1 ? (
+        {data && data?.content.length > 0 ? (
           data?.content.map((opener) => (
             <UserCard me={user?.id == opener.id} {...opener} key={opener.id} />
           ))

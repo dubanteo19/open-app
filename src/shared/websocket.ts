@@ -1,4 +1,5 @@
 import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
+import { LOCAL_IP } from "./baseQuery";
 
 let socketClient: Client | null = null;
 
@@ -12,7 +13,7 @@ export const getSocketClient = (): Client | null => {
   }
 
   socketClient = new Client({
-    brokerURL: `ws://192.168.102.242:8080/ws?access_token=${encodeURIComponent(token)}`,
+    brokerURL: `ws://${LOCAL_IP}/ws?access_token=${encodeURIComponent(token)}`,
     connectHeaders: { Authorization: `Bearer ${token}` },
     reconnectDelay: 10000,
     debug: (str) => console.log(str),
