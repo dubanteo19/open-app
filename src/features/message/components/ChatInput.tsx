@@ -12,10 +12,13 @@ interface ChatInputProps {
 
 export const ChatInput: FC<ChatInputProps> = ({ onSend }) => {
   const [message, setMessage] = React.useState("");
-  const [showSendIcon, setShowSendIcon] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiRef = React.useRef<HTMLDivElement>(null);
-  const handleSendMessage = () => {};
+  const handleSendMessage = () => {
+    const filteredMessage = message.trim() === "" ? "👍" : message;
+    onSend(filteredMessage);
+    setMessage("");
+  };
 
   return (
     <div className="flex items-center space-x-2 border-t p-2">
@@ -35,7 +38,7 @@ export const ChatInput: FC<ChatInputProps> = ({ onSend }) => {
           className="border-none focus-visible:ring-0 focus-visible:ring-offset-0"
           placeholder="Type a message..."
           onChange={(e) => {
-            onSend(e.target.value);
+            setMessage(e.target.value);
           }}
           value={message}
           size={200}
@@ -65,7 +68,7 @@ export const ChatInput: FC<ChatInputProps> = ({ onSend }) => {
       </div>
       {/* Right side like icon */}
       <Button variant="ghost" size="icon" onClick={handleSendMessage}>
-        {showSendIcon ? (
+        {message.trim() ? (
           <LucideSend className="size-5" />
         ) : (
           <MdThumbUp className="size-5" />

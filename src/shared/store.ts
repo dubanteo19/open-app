@@ -2,6 +2,7 @@ import { authApi } from "@/features/auth/api";
 import authReducer from "@/features/auth/slice";
 import settingsReducer from "@/features/common/settings/slice";
 import { discoveryApi } from "@/features/discovery/api";
+import { chatApi } from "@/features/message/api";
 import { commentApi } from "@/features/user/comment/api";
 import { postApi } from "@/features/user/feed/api";
 import { openerApi } from "@/features/user/profile/api";
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   [commentApi.reducerPath]: commentApi.reducer,
   [openerApi.reducerPath]: openerApi.reducer,
   [discoveryApi.reducerPath]: discoveryApi.reducer,
+  [chatApi.reducerPath]: chatApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -44,6 +46,7 @@ export const store = configureStore({
       openerApi.middleware,
       commentApi.middleware,
       discoveryApi.middleware,
+      chatApi.middleware,
     ),
 });
 

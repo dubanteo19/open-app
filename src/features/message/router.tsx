@@ -11,8 +11,8 @@ export const chatRouter: RouteObject = {
     </ProtectedRoute>
   ),
   children: [
-    { index: true, element: <Navigate to={"messages/conversations"} /> },
-    { path: "messages/conversations/:conversationId", element: <ChatWindow /> },
-    { path: "messages/conversations", element: <ChatWindow /> },
+    { index: true, element: <Navigate to={"conversations"} /> },
+    { path: "conversations/:conversationId", element: <ChatWindow /> },
+    { path: "conversations", element: <ChatWindow /> },
   ],
 };

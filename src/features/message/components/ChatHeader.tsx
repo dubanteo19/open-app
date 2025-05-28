@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 interface ChatHeaderProps {
-  title: string;
+  title?: string;
   avatar?: string;
   isOnline: boolean;
 }

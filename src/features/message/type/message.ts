@@ -7,9 +7,14 @@ export enum MessageState {
   READ = "READ",
   ERROR = "ERROR",
 }
+
+export interface MessageCreateRequest {
+  conversationId:number;
+  receiverId: number;
+  content: string;
+}
 export interface Message {
   id: number;
-  conversationId: number;
   sender: User;
   content: string;
   createdAt: string;

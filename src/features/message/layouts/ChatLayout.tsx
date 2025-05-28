@@ -3,9 +3,9 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { ConversationList } from "../components/ConversationList";
 export const ChatLayout = () => {
-  const { conversationId } = useParams<{ conversationId: string }>();
   return (
     <div className="flex h-screen w-full items-center justify-cente px-1">
       <ResizablePanelGroup
@@ -14,7 +14,9 @@ export const ChatLayout = () => {
       >
         <ResizablePanel defaultSize={25} minSize={5} maxSize={30}>
           <div className="flex h-full items-center justify-center">
-            {conversationId}
+            <div className="flex flex-col">
+              <ConversationList />
+            </div>
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />

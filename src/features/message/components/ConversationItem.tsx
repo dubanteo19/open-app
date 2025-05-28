@@ -1,5 +1,7 @@
-import { cn, formatTime } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { AVATAR } from "@/shared/constant";
 import { Conversation } from "../type/conversation";
+import { useNavigate } from "react-router-dom";
 
 interface ConversationItemProps {
   conversation: Conversation;
@@ -7,9 +9,11 @@ interface ConversationItemProps {
 export const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
 }) => {
+  const naviate = useNavigate();
   const isSelected = false;
   return (
     <div
+      onClick={() => naviate(`conversations/${conversation.id}`)}
       className={cn(
         "flex flex-row w-full h-[65px] items-center px-1 hover:bg-gray-200 cursor-pointer",
         isSelected ? "bg-gray-200" : "",
@@ -17,7 +21,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
     >
       {/* Avatar */}
       <div className="w-13 h-13 rounded-full overflow-hidden my-2 mr-1 flex-shrink-0">
-        <img className="w-full h-full" src={conversation.avatar} />
+        <img className="w-full h-full" src={conversation.avatar || AVATAR} />
       </div>
       <div className="flex flex-col w-full justify-space-between overflow-hidden">
         <div
@@ -33,7 +37,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
               conversation.unread ? "text-black" : "text-gray-500",
             )}
           >
-            {formatTime(conversation.lastMessage.createdAt)}
+            {/*             {formatTime(conversation.lastMessage.createdAt)} */}
           </span>
         </div>
         <div
@@ -43,7 +47,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
           )}
         >
           <p className="truncate flex-grow">
-            {conversation.lastMessage.content}
+            {/*             {conversation.lastMessage.content} */}
           </p>
           {conversation.unread && (
             <div className="w-2 h-2 rounded-full flex-shrink-0 bg-red-500"></div>
