@@ -1,5 +1,6 @@
 import { authApi } from "@/features/auth/api";
 import authReducer from "@/features/auth/slice";
+import chatReducer from "@/features/message/slice";
 import settingsReducer from "@/features/common/settings/slice";
 import { discoveryApi } from "@/features/discovery/api";
 import { chatApi } from "@/features/message/api";
@@ -23,6 +24,7 @@ const persistConfig = {
 };
 const rootReducer = combineReducers({
   auth: authReducer,
+  chat: chatReducer,
   settings: settingsReducer,
   [authApi.reducerPath]: authApi.reducer,
   [postApi.reducerPath]: postApi.reducer,

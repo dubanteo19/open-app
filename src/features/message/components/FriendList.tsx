@@ -1,32 +1,42 @@
 import { useGetOpenerFriendsQuery } from "@/features/discovery/api";
-import { useCreateConversationMutation } from "../api";
 import { AVATAR } from "@/shared/constant";
-
-export const FriendList = () => {
-  const { data: friends } = useGetOpenerFriendsQuery({ page: 0, size: 20 });
-  const [createConversation] = useCreateConversationMutation();
-  const handleCreateConversation = async (targetId: number) => {
-    try {
-      await createConversation({ targetId }).unwrap();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+import { User } from "@/types/user";
+import { FC } from "react";
+interface FriendItemProps extends User {
+  onClick: () => void;
+}
+export const FriendItem: FC<FriendItemProps> = (props) => {
+  const friend = props;
   return (
-    <div className="flex flex-col">
-      {friends?.content &&
+    <div
+      className="flex items-center rounded-xl px-2 space-x-2 hover:bg-gray-100 cursor-pointer"
+      onClick={props.onClick}
+    >
+      <div className="size-12 rounded-full overflow-hidden">
+        <img className="w-full h-full" src={friend.avatarUrl || AVATAR} />
+      </div>
+      <p>@{friend.username}</p>
+    </div>
+  );
+};
+interface FriendListProps {
+  onClickFriend: (friendId: number) => void;
+}
+export const FriendList: FC<FriendListProps> = ({ onClickFriend }) => {
+  const { data: friends } = useGetOpenerFriendsQuery({ page: 0, size: 100 });
+  return (
+    <div className="flex flex-col space-y-2">
+      {friends?.content && friends?.content.length > 0 ? (
         friends.content.map((friend) => (
-          <div
+          <FriendItem
             key={friend.id}
-            className="flex items-center space-x-2 hover:bg-gray-100 px-2"
-            onClick={() => handleCreateConversation(friend.id)}
-          >
-            <div className="size-12 rounded-full overflow-hidden">
-              <img src={friend.avatarUrl || AVATAR} />
-            </div>
-            <p>@{friend.username}</p>
-          </div>
-        ))}
+            {...friend}
+            onClick={() => onClickFriend(friend.id)}
+          />
+        ))
+      ) : (
+        <p className="text-center">You have no friends</p>
+      )}
     </div>
   );
 };

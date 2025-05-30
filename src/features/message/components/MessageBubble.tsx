@@ -32,14 +32,14 @@ export const MessageBubble: FC<ChatMessageBubbleProps> = ({
           className={cn(
             "rounded-xl px-4 py-2   text-sm k max-w-[600px] shadow",
             isMine
-              ? "bg-primary/90   rounded-br-none"
+              ? "bg-secondary/90   rounded-br-none"
               : "bg-white rounded-bl-none ",
           )}
         >
           {!isMine && (
-            <h3 className=" text-primary leading-none my-1">
+            <h4 className=" text-primary leading-none my-1 ">
               {sender.username}
-            </h3>
+            </h4>
           )}
           <div className="wrap-break-word">{content}</div>
           <div

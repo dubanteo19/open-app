@@ -1,8 +1,13 @@
 import { extractData } from "@/lib/utils";
 import { baseQuery } from "@/shared/baseQuery";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { Conversation } from "./type/conversation";
 import { Message, MessageCreateRequest } from "./type/message";
+import {
+  setConversations,
+  setMessagesForConversation,
+  setSelectedConversationId,
+} from "./slice";
+import { Conversation, ConversationSummary } from "./type/conversation";
 export const chatApi = createApi({
   reducerPath: "chatApi",
   tagTypes: ["Chat", "Message"],
@@ -13,15 +18,34 @@ export const chatApi = createApi({
       transformResponse: extractData,
       providesTags: ["Message"],
     }),
-    getConversation: build.query<Conversation, number>({
+    getConversationById: build.query<Conversation, number>({
       query: (id) => `chat/conversations/${id}`,
       transformResponse: extractData,
       providesTags: ["Chat"],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          const conversationId = data.summary.id;
+          const messages = data.messages;
+          dispatch(setSelectedConversationId(conversationId));
+          dispatch(setMessagesForConversation({ conversationId, messages }));
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
-    getConversations: build.query<Conversation[], void>({
+    getConversations: build.query<ConversationSummary[], void>({
       query: () => "chat/conversations",
       transformResponse: extractData,
       providesTags: ["Chat"],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setConversations(data));
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
     sendMessage: build.mutation<Message, MessageCreateRequest>({
       query: (body) => ({
@@ -32,7 +56,10 @@ export const chatApi = createApi({
       transformResponse: extractData,
       invalidatesTags: ["Message"],
     }),
-    createConversation: build.mutation<Conversation, { targetId: number }>({
+    getOrCreateConversation: build.mutation<
+      ConversationSummary,
+      { targetId: number }
+    >({
       query: (params) => ({
         url: "chat/conversations",
         params,
@@ -44,9 +71,9 @@ export const chatApi = createApi({
   }),
 });
 export const {
-  useCreateConversationMutation,
+  useGetOrCreateConversationMutation,
   useGetConversationsQuery,
   useGetMessagesQuery,
   useSendMessageMutation,
-  useGetConversationQuery
+  useGetConversationByIdQuery,
 } = chatApi;

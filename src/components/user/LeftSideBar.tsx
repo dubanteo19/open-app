@@ -73,7 +73,7 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
       className={cn("flex flex-col  justify-between py-2 h-screen ", className)}
     >
       <div className="w-full">
-        <div className="w-10 h-10 ">
+        <div className="size-10">
           <Link to={"/feed"}>
             <img
               className="h-max w-max"

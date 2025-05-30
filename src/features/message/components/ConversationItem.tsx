@@ -1,26 +1,34 @@
 import { cn } from "@/lib/utils";
 import { AVATAR } from "@/shared/constant";
-import { Conversation } from "../type/conversation";
 import { useNavigate } from "react-router-dom";
+import { ConversationSummary } from "../type/conversation";
 
 interface ConversationItemProps {
-  conversation: Conversation;
+  conversation: ConversationSummary;
+  typing: boolean;
+  selected: boolean;
 }
 export const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
+  selected,
+  typing,
 }) => {
   const naviate = useNavigate();
-  const isSelected = false;
   return (
     <div
       onClick={() => naviate(`conversations/${conversation.id}`)}
       className={cn(
         "flex flex-row w-full h-[65px] items-center px-1 hover:bg-gray-200 cursor-pointer",
-        isSelected ? "bg-gray-200" : "",
+        selected && "bg-gray-200",
       )}
     >
       {/* Avatar */}
-      <div className="w-13 h-13 rounded-full overflow-hidden my-2 mr-1 flex-shrink-0">
+      <div
+        className={cn(
+          "w-13 h-13 rounded-full overflow-hidden my-2 mr-1 flex-shrink-0",
+          typing && "animate-spin",
+        )}
+      >
         <img className="w-full h-full" src={conversation.avatar || AVATAR} />
       </div>
       <div className="flex flex-col w-full justify-space-between overflow-hidden">
