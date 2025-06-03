@@ -38,9 +38,7 @@ export const PostDetailPage = () => {
         <PostItem
           onToggleLike={handleLikeToggle}
           post={post}
-          onEdit={function (postId: number, newContent: string): void {
-            throw new Error("Function not implemented.");
-          }}
+          onEdit={() => {}}
         />
       )}
       {post && (
