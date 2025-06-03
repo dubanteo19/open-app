@@ -128,6 +128,6 @@ export const useWebRTC = ({
     if (localVideoRef.current) localVideoRef.current.srcObject = null;
     if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
     onCallStateChange("idle");
-  }, [onCallStateChange]);
+  }, [onCallStateChange, localVideoRef, remoteVideoRef]);
   return { startCall, acceptCall, handleAsnwer, handleIce, endCall };
 };

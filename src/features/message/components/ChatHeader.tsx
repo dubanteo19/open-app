@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { cn } from "@/lib/utils";
 import { PhoneCall, VideoIcon } from "lucide-react";
 import { Link } from "react-router-dom";
-import { setCallState, setFrom, setRemoteUsername, setTo } from "../call/slice";
+import { setCallState, setRemoteUsername } from "../call/slice";
 
 interface ChatHeaderProps {
   targetUsername: string;

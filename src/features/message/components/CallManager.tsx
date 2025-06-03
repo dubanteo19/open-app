@@ -15,11 +15,10 @@ import { setCallState, setRemoteUsername, setSdp } from "../call/slice";
 import { SignalMessage } from "../type/callSignalMessage";
 
 export const CallManager = () => {
-  console.log("mount the dam manager");
+  const { user } = useAppSelector((state) => state.auth);
   const { callState, remoteUsername, sdp } = useAppSelector(
     (state) => state.call,
   );
-  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -34,18 +33,19 @@ export const CallManager = () => {
   );
   useEffect(() => {
     if (remoteUsername && callState == "calling") {
-      startCall(user?.username, remoteUsername);
+      if (user) startCall(user?.username, remoteUsername);
     }
   });
   const onOffer = useCallback(
     (message: IMessage) => {
       const signal: SignalMessage = JSON.parse(message.body);
-      console.log(signal);
-      dispatch(setCallState("incoming"));
-      dispatch(setRemoteUsername(signal.from));
-      dispatch(setSdp(signal.sdp!));
+      if (user && signal.from) {
+        dispatch(setCallState("incoming"));
+        dispatch(setRemoteUsername(signal.from));
+        dispatch(setSdp(signal.sdp!));
+      }
     },
-    [dispatch],
+    [dispatch, user],
   );
   const onAnswer = useCallback(
     (message: IMessage) => {
@@ -85,14 +85,16 @@ export const CallManager = () => {
       unsubscribeIce();
       deactivateSocketClient();
     };
-  }, []);
+  }, [onOffer, onAnswer, onIce]);
   return (
     <div>
       <Dialog open={true}>
         {callState == "incoming" && (
           <IncomingCall
             onAccept={() => {
-              acceptCall(user?.username, remoteUsername, sdp!);
+              if (user && remoteUsername) {
+                acceptCall(user?.username, remoteUsername, sdp!);
+              }
             }}
             onReject={() => dispatch(setCallState("idle"))}
           />
