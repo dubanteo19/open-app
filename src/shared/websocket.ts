@@ -1,7 +1,6 @@
 import { SignalMessage } from "@/features/message/type/callSignalMessage";
 import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 import { IP } from "./baseQuery";
-
 let socketClient: Client | null = null;
 
 export const getSocketClient = (): Client | null => {
