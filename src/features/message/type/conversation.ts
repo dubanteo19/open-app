@@ -8,7 +8,8 @@ export interface ConversationSummary {
   id: number;
   name: string;
   receiver: string;
-  lastMessage?: Message;
   avatar?: string;
   unread: boolean;
+  lastMessageContent: string;
+  lastMessageSentAt: string;
 }

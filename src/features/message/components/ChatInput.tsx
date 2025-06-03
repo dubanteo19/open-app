@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useAppSelector } from "@/hooks/useAppDispatch";
 import { getSocketClient } from "@/shared/websocket";
 import EmojiPicker from "emoji-picker-react";
 import { debounce } from "lodash";
@@ -11,7 +10,7 @@ import { MdThumbUp } from "react-icons/md";
 
 interface ChatInputProps {
   onSend: (content: string) => void;
-  conversationId: number;
+  conversationId: number | null;
   to: string;
 }
 

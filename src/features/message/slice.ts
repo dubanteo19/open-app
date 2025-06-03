@@ -39,10 +39,18 @@ const chatSlice = createSlice({
       state.messagesByConversation[conversationId] = messages;
     },
     addMessageToConversation(state, action: PayloadAction<Message>) {
+      const message = action.payload;
       const { conversationId } = action.payload;
       if (!state.messagesByConversation[conversationId])
         state.messagesByConversation[conversationId] = [];
-      state.messagesByConversation[conversationId].push(action.payload);
+      state.messagesByConversation[conversationId].push(message);
+      const index = state.conversations.findIndex(
+        (c) => c.id === message.conversationId,
+      );
+      if (index !== -1) {
+        state.conversations[index].lastMessageContent = message.content;
+        state.conversations[index].lastMessageSentAt = message.createdAt;
+      }
     },
   },
 });

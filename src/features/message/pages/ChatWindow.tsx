@@ -1,24 +1,16 @@
 import { Loader } from "@/components/common/Loader";
-import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
-import {
-  activateSocketClient,
-  deactivateSocketClient,
-  getSocketClient,
-  subscribeWhenConnected,
-} from "@/shared/websocket";
+import { useAppSelector } from "@/hooks/useAppDispatch";
+import { getSocketClient } from "@/shared/websocket";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useGetConversationByIdQuery } from "../api";
 import { ChatHeader } from "../components/ChatHeader";
 import { ChatInput } from "../components/ChatInput";
 import { ChatMessageList } from "../components/ChatMessageList";
 import { NoConversationScreen } from "../components/NoConversationScreen";
-import { addMessageToConversation, setChatSignal } from "../slice";
 
 export const ChatWindow = () => {
   const { conversationId } = useParams<{ conversationId: string }>();
-  const dispatch = useAppDispatch();
   const conversationIdNumber = conversationId ? Number(conversationId) : null;
   const { data: conversation, isLoading } = useGetConversationByIdQuery(
     conversationIdNumber ?? skipToken,
@@ -43,7 +35,7 @@ export const ChatWindow = () => {
       console.log("Not connected, cannot send typing event");
     }
   };
-  useEffect(() => {
+  /* useEffect(() => {
     const client = getSocketClient();
     if (!client) return;
     const topic = "/user/queue/messages";
@@ -56,16 +48,19 @@ export const ChatWindow = () => {
     return () => {
       unsubscribe(), deactivateSocketClient();
     };
-  }, [dispatch]);
+  }, [dispatch]); */
   if (isLoading) return <Loader />;
   if (!conversationId) return <NoConversationScreen />;
+
   return (
     <div className="flex flex-col size-full bg-background">
-      <ChatHeader
-        title={conversation?.summary.name}
-        avatar={conversation?.summary.avatar}
-        isOnline
-      />
+      {conversation && (
+        <ChatHeader
+          targetUsername={conversation?.summary.name}
+          avatar={conversation?.summary.avatar}
+          isOnline
+        />
+      )}
       {selectedConversationId && (
         <ChatMessageList
           messages={messagesByConversation[selectedConversationId]}

@@ -1,7 +1,8 @@
-import { cn } from "@/lib/utils";
+import { cn, formatTime } from "@/lib/utils";
 import { AVATAR } from "@/shared/constant";
 import { useNavigate } from "react-router-dom";
 import { ConversationSummary } from "../type/conversation";
+import { ImageContainer } from "@/components/common/ImageContainer";
 
 interface ConversationItemProps {
   conversation: ConversationSummary;
@@ -23,14 +24,13 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
       )}
     >
       {/* Avatar */}
-      <div
+      <ImageContainer
         className={cn(
-          "w-13 h-13 rounded-full overflow-hidden my-2 mr-1 flex-shrink-0",
+          "my-2 mr-1 flex-shrink-0 size-12",
           typing && "animate-spin",
         )}
-      >
-        <img className="w-full h-full" src={conversation.avatar || AVATAR} />
-      </div>
+        src={conversation.avatar || AVATAR}
+      />
       <div className="flex flex-col w-full justify-space-between overflow-hidden">
         <div
           className={cn(
@@ -45,7 +45,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
               conversation.unread ? "text-black" : "text-gray-500",
             )}
           >
-            {/*             {formatTime(conversation.lastMessage.createdAt)} */}
+            {formatTime(conversation.lastMessageSentAt)}
           </span>
         </div>
         <div
@@ -55,7 +55,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
           )}
         >
           <p className="truncate flex-grow">
-            {/*             {conversation.lastMessage.content} */}
+            {conversation.lastMessageContent}
           </p>
           {conversation.unread && (
             <div className="w-2 h-2 rounded-full flex-shrink-0 bg-red-500"></div>

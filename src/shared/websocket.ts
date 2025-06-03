@@ -1,5 +1,6 @@
+import { SignalMessage } from "@/features/message/type/callSignalMessage";
 import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
-import { LOCAL_IP } from "./baseQuery";
+import { IP } from "./baseQuery";
 
 let socketClient: Client | null = null;
 
@@ -13,7 +14,7 @@ export const getSocketClient = (): Client | null => {
   }
 
   socketClient = new Client({
-    brokerURL: `ws://${LOCAL_IP}/ws?token=${token}`,
+    brokerURL: `ws://${IP}/ws?token=${token}`,
     connectHeaders: { Authorization: `Bearer ${token}` },
     reconnectDelay: 10000,
     debug: (str) => console.log(str),
@@ -59,5 +60,14 @@ export const activateSocketClient = () => {
 export const deactivateSocketClient = () => {
   if (socketClient && socketClient.active) {
     socketClient.deactivate();
+  }
+};
+
+export const sendSignal = (destination: string, payload: SignalMessage) => {
+  const client = getSocketClient();
+  if (client?.connected) {
+    client.publish({ destination, body: JSON.stringify(payload) });
+  } else {
+    console.log("Not connected");
   }
 };
