@@ -4,7 +4,6 @@ import { FaHashnode, FaUser } from "react-icons/fa6";
 import { GoHomeFill } from "react-icons/go";
 import { IoIosMore } from "react-icons/io";
 import { IoBookmark, IoMail, IoNotificationsSharp } from "react-icons/io5";
-
 import { logout } from "@/features/auth/slice";
 import { RootState } from "@/shared/store";
 import {
@@ -74,11 +73,11 @@ export const LeftSideBar: React.FC<Props> = ({ className }) => {
       className={cn("flex flex-col  justify-between py-2 h-screen ", className)}
     >
       <div className="w-full">
-        <div className="w-10 h-10 ">
+        <div className="size-10">
           <Link to={"/feed"}>
             <img
               className="h-max w-max"
-              src="https://logosandtypes.com/wp-content/uploads/2022/04/enovis.svg"
+              src={'/logo2.png'}
             />
           </Link>
         </div>

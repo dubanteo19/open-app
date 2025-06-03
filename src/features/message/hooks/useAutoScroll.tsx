@@ -13,7 +13,9 @@ interface UseAutoScrollResult<T extends HTMLElement> {
   isUserAtBottom: boolean;
 }
 
-export function useAutoScroll<T extends HTMLElement = HTMLDivElement>(): UseAutoScrollResult<T> {
+export function useAutoScroll<
+  T extends HTMLElement = HTMLDivElement,
+>(): UseAutoScrollResult<T> {
   const containerRef = useRef<T | null>(null);
   const isUserAtBottomRef = useRef(true);
   const isMounted = useRef(false);

@@ -22,6 +22,14 @@ export const discoveryApi = createApi({
       }),
       invalidatesTags: ["Discovery"],
     }),
+    getOpenerFriends: build.query<PageResponse<User>, PageRequest>({
+      query: (page) => ({
+        url: "openers/friends",
+        params: page,
+      }),
+      transformResponse: extractData,
+      providesTags: ["Discovery"],
+    }),
     getOpenerFollowers: build.query<
       PageResponse<SuggestedOpener>,
       PageRequest & { username: string }
@@ -62,5 +70,6 @@ export const {
   useFollowOpenerMutation,
   useUnfollowOpenerMutation,
   useGetOpenerFollowingQuery,
-  useGetOpenerFollowersQuery
+  useGetOpenerFollowersQuery,
+  useGetOpenerFriendsQuery
 } = discoveryApi;

@@ -1,8 +1,8 @@
 import {
-    activateSocketClient,
-    deactivateSocketClient,
-    getSocketClient,
-    subscribeWhenConnected,
+  activateSocketClient,
+  deactivateSocketClient,
+  getSocketClient,
+  subscribeWhenConnected,
 } from "@/shared/websocket";
 import { useEffect, useState } from "react";
 
@@ -26,7 +26,6 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({
       topic,
       (message) => {
         const payload = JSON.parse(message.body);
-        console.log(payload.username);
         const typingUsername = payload.username;
         if (typingUsername != currentUsername) {
           setIsTyping(true);

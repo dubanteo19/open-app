@@ -35,7 +35,7 @@ export const Avatar: React.FC<AvatarProps> = (userInfo) => {
               src={userInfo.avatarUrl || AVATAR}
               alt="Avatar"
             />
-            {userInfo.isMine && (
+            {   !userInfo.isMine && (
               <Button
                 variant="ghost"
                 onClick={() => setOpenAvatarDialog(true)}
