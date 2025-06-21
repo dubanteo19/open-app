@@ -1,25 +1,24 @@
-import { sendSignal } from "@/shared/websocket";
 import { RefObject, useCallback, useRef } from "react";
 import { CallState } from "./slice";
+import { Client } from "@stomp/stompjs";
 
 interface UseWebRTCParams {
   localVideoRef: RefObject<HTMLVideoElement>;
   remoteVideoRef: RefObject<HTMLVideoElement>;
   onCallStateChange: (state: CallState) => void;
   onRemoteUsernameChange: (username: string) => void;
+  stompClient: Client | null;
 }
 export const useWebRTC = ({
   localVideoRef,
   remoteVideoRef,
   onRemoteUsernameChange,
   onCallStateChange,
+  stompClient,
 }: UseWebRTCParams) => {
   const peerRef = useRef<RTCPeerConnection | null>(null);
   const startCall = useCallback(
     async (from: string, to: string) => {
-      const config: RTCConfiguration = {
-        iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-      };
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
@@ -27,41 +26,64 @@ export const useWebRTC = ({
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
       }
+      const config: RTCConfiguration = {
+        iceServers: [
+          {
+            urls: ["turns:turn.dbt19.store:5349?transport=tcp"],
+            username: "dbt19",
+            credential: "123456",
+          },
+        ],
+      };
       const pc = new RTCPeerConnection(config);
       peerRef.current = pc;
       stream.getTracks().forEach((track) => pc.addTrack(track, stream));
-      pc.ontrack = (event) => {
+      peerRef.current.ontrack = (event) => {
         if (remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = event.streams[0];
+          const remoteStream = event.streams[0];
+          remoteVideoRef.current.srcObject = remoteStream;
         }
       };
       pc.onicecandidate = (event) => {
-        if (event.candidate) {
-          sendSignal("/app/call.ice", {
+        if (event.candidate && stompClient?.connected) {
+          const destination = "/app/call.ice";
+          const body = {
             to,
             from,
             candidate: event.candidate,
             signalType: "ICE",
-          });
+          };
+          console.log("Sending ICE candidate:", event.candidate);
+          stompClient.publish({ destination, body: JSON.stringify(body) });
         }
       };
       const offer = await pc.createOffer();
-      await pc.setLocalDescription(offer);
-      sendSignal("/app/call.offer", {
+      const body = {
         to,
         from,
         sdp: offer.sdp,
         signalType: "OFFER",
+      };
+      await pc.setLocalDescription(offer);
+      stompClient?.publish({
+        destination: "/app/call.offer",
+        body: JSON.stringify(body),
       });
       onRemoteUsernameChange(to);
     },
-    [localVideoRef, remoteVideoRef, onRemoteUsernameChange],
+    [localVideoRef, remoteVideoRef, onRemoteUsernameChange, stompClient],
   );
   const acceptCall = useCallback(
     async (from: string, to: string, sdp: string) => {
       onCallStateChange("active");
       const config: RTCConfiguration = {
-        iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+        iceServers: [
+          {
+            urls: ["turns:turn.dbt19.store:5349?transport=tcp"],
+            username: "dbt19",
+            credential: "123456",
+          },
+        ],
       };
       const pc = new RTCPeerConnection(config);
       peerRef.current = pc;
@@ -69,25 +91,27 @@ export const useWebRTC = ({
         video: true,
         audio: true,
       });
-      console.log("set local ref");
       if (localVideoRef.current) {
-        console.log("set local ref ok");
         localVideoRef.current.srcObject = stream;
       }
       stream.getTracks().forEach((track) => pc.addTrack(track, stream));
-      pc.ontrack = (event) => {
+      peerRef.current.ontrack = (event) => {
         if (remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = event.streams[0];
+          const remoteStream = event.streams[0];
+          remoteVideoRef.current.srcObject = remoteStream;
         }
       };
       pc.onicecandidate = (event) => {
-        if (event.candidate) {
-          sendSignal("/app/call.ice", {
+        if (event.candidate && stompClient?.connected) {
+          const destination = "/app/call.ice";
+          const body = {
             from,
             to,
             candidate: event.candidate,
             signalType: "ICE",
-          });
+          };
+          console.log("Sending ICE candidate:", event.candidate);
+          stompClient.publish({ destination, body: JSON.stringify(body) });
         }
       };
       await pc.setRemoteDescription(
@@ -95,16 +119,21 @@ export const useWebRTC = ({
       );
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
-      sendSignal("/app/call.answer", {
+      const body = {
         from,
         to,
         sdp: answer.sdp,
         signalType: "ASNWER",
+      };
+      stompClient?.publish({
+        destination: "/app/call.answer",
+        body: JSON.stringify(body),
       });
     },
-    [localVideoRef, remoteVideoRef, onCallStateChange],
+    [localVideoRef, remoteVideoRef, onCallStateChange, stompClient],
   );
-  const handleAsnwer = useCallback(
+
+  const handleAnswer = useCallback(
     async (sdp: string) => {
       const pc = peerRef.current;
       if (!pc) return;
@@ -115,10 +144,12 @@ export const useWebRTC = ({
     },
     [onCallStateChange],
   );
+
   const handleIce = useCallback(async (candidate: RTCIceCandidate) => {
     const pc = peerRef.current;
+    console.log("Received ICE candidate:", JSON.stringify(candidate));
     if (!pc) return;
-    await pc.addIceCandidate(new RTCIceCandidate(candidate));
+    pc.addIceCandidate(candidate);
   }, []);
   const endCall = useCallback(() => {
     peerRef.current?.close();
@@ -129,5 +160,5 @@ export const useWebRTC = ({
     if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
     onCallStateChange("idle");
   }, [onCallStateChange, localVideoRef, remoteVideoRef]);
-  return { startCall, acceptCall, handleAsnwer, handleIce, endCall };
+  return { startCall, acceptCall, handleAnswer, handleIce, endCall };
 };

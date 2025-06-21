@@ -1,17 +1,24 @@
 import { Loader } from "@/components/common/Loader";
 import { useAppSelector } from "@/hooks/useAppDispatch";
-import { getSocketClient } from "@/shared/websocket";
+import { useStomp } from "@/hooks/useStomp";
 import { skipToken } from "@reduxjs/toolkit/query";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useGetConversationByIdQuery } from "../api";
+import { useGetConversationByIdQuery, useMarkAsSeenMutation } from "../api";
+import { CallManager } from "../components/CallManager";
 import { ChatHeader } from "../components/ChatHeader";
 import { ChatInput } from "../components/ChatInput";
 import { ChatMessageList } from "../components/ChatMessageList";
 import { NoConversationScreen } from "../components/NoConversationScreen";
+import { addMessageToConversation, setChatSignal } from "../slice";
 
 export const ChatWindow = () => {
   const { conversationId } = useParams<{ conversationId: string }>();
+  const dispatch = useDispatch();
   const conversationIdNumber = conversationId ? Number(conversationId) : null;
+  const { connected, subscribeToTopic, stompClient } = useStomp();
+
   const { data: conversation, isLoading } = useGetConversationByIdQuery(
     conversationIdNumber ?? skipToken,
     { refetchOnMountOrArgChange: true },
@@ -20,14 +27,13 @@ export const ChatWindow = () => {
     (state) => state.chat,
   );
   const handleSendMessage = async (content: string) => {
-    const client = getSocketClient();
     const body = {
       content,
       conversationId: selectedConversationId,
       receiver: conversation?.summary.receiver,
     };
-    if (client?.connected) {
-      client.publish({
+    if (stompClient?.current?.connected) {
+      stompClient.current.publish({
         destination: "/app/chat.send",
         body: JSON.stringify(body),
       });
@@ -35,20 +41,18 @@ export const ChatWindow = () => {
       console.log("Not connected, cannot send typing event");
     }
   };
-  /* useEffect(() => {
-    const client = getSocketClient();
-    if (!client) return;
+  useEffect(() => {
+    if (!connected) return;
     const topic = "/user/queue/messages";
-    const unsubscribe = subscribeWhenConnected(client, topic, (message) => {
+    const unsubscribe = subscribeToTopic(topic, (message) => {
       const payload = JSON.parse(message.body);
       dispatch(addMessageToConversation(payload));
       dispatch(setChatSignal(null));
     });
-    activateSocketClient();
     return () => {
-      unsubscribe(), deactivateSocketClient();
+      unsubscribe();
     };
-  }, [dispatch]); */
+  }, [connected, dispatch, subscribeToTopic]);
   if (isLoading) return <Loader />;
   if (!conversationId) return <NoConversationScreen />;
 
@@ -73,6 +77,7 @@ export const ChatWindow = () => {
           onSend={handleSendMessage}
         />
       )}
+      <CallManager />
     </div>
   );
 };

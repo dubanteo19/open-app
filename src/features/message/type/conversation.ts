@@ -9,7 +9,7 @@ export interface ConversationSummary {
   name: string;
   receiver: string;
   avatar?: string;
-  unread: boolean;
+  unseenCount: number;
   lastMessageContent: string;
   lastMessageSentAt: string;
 }

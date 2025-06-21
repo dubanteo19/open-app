@@ -2,45 +2,40 @@ import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
 import {
   activateSocketClient,
   deactivateSocketClient,
-  getSocketClient,
-  subscribeWhenConnected,
 } from "@/shared/websocket";
 import { FC, useEffect, useRef } from "react";
 import { MessageBubble } from "../components/MessageBubble";
 import { setChatSignal } from "../slice";
 import { ChatSignal } from "../type/chatSignal";
+import { useStomp } from "@/hooks/useStomp";
 import { Message } from "../type/message";
-
 interface ChatMessageListProps {
   messages?: Message[];
 }
+
 export const ChatMessageList: FC<ChatMessageListProps> = ({ messages }) => {
   const { user } = useAppSelector((state) => state.auth);
+  const { connected, subscribeToTopic } = useStomp();
   const { chatSignal, selectedConversationId } = useAppSelector(
     (state) => state.chat,
   );
   const dispatch = useAppDispatch();
   useEffect(() => {
-    const socketClient = getSocketClient();
-    if (!socketClient) {
+    if (!connected) {
       return;
     }
     const topic = "/user/queue/typing";
-    const unsubscribe = subscribeWhenConnected(
-      socketClient,
-      topic,
-      (message) => {
-        const payload = JSON.parse(message.body) as ChatSignal;
-        dispatch(setChatSignal(payload));
-        setTimeout(() => dispatch(setChatSignal(null)), 3000);
-      },
-    );
+    const unsubscribe = subscribeToTopic(topic, (message) => {
+      const payload: ChatSignal = JSON.parse(message.body);
+      dispatch(setChatSignal(payload));
+      setTimeout(() => dispatch(setChatSignal(null)), 3000);
+    });
     activateSocketClient();
     return () => {
       unsubscribe();
       deactivateSocketClient();
     };
-  }, [dispatch]);
+  }, [connected, dispatch, subscribeToTopic]);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {

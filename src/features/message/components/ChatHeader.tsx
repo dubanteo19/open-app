@@ -40,16 +40,16 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         </div>
       </div>
       <div className="flex items-center space-x-2">
+        <Button variant={"ghost"}>
+          <PhoneCall />
+        </Button>
         <Button
-          variant={"ghost"}
           onClick={async () => {
             dispatch(setRemoteUsername(targetUsername));
             dispatch(setCallState("calling"));
           }}
+          variant={"ghost"}
         >
-          <PhoneCall />
-        </Button>
-        <Button variant={"ghost"}>
           <VideoIcon />
         </Button>
       </div>

@@ -1,11 +1,37 @@
-import { Outlet } from "react-router-dom";
-import { LeftSideBar } from "../user/LeftSideBar";
 import { RightSideBar } from "@/components/user/rightSideBar/RightSideBar";
+import {
+  notificationApi,
+  useGetUnreadNotificationCountQuery,
+} from "@/features/user/notifications/api";
+import { useStomp } from "@/hooks/useStomp";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Outlet } from "react-router-dom";
+import { toast } from "sonner";
+import { LeftSideBar } from "../user/LeftSideBar";
+import { incrementUnreadNotification } from "@/features/user/meta/slice";
+import { useGetUnseenConversationCountQuery } from "@/features/message/api";
 
 export const UserLayout = () => {
+  const { connected, subscribeToTopic } = useStomp();
+  useGetUnreadNotificationCountQuery();
+  useGetUnseenConversationCountQuery();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!connected) return;
+    const topic = "/user/queue/notifications";
+    const unsubscribe = subscribeToTopic(topic, (message) => {
+      toast.success(message.body, { duration: 2000 });
+      dispatch(incrementUnreadNotification());
+      dispatch(notificationApi.util.invalidateTags(["Notification"]));
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [connected, subscribeToTopic, dispatch]);
   return (
-    <div className="flex justify-center  min-h-screen px-5 lg:px-35 w-full ">
-      <div className="hidden lg:block fixed top-0 left-[200px] w-56  ">
+    <div className="flex justify-center  min-h-screen px-15  lg:px-35 w-full ">
+      <div className=" lg:block fixed top-0  left-[10px] lg:left-[200px] lg:w-56   ">
         <LeftSideBar />
       </div>
       <div className="w-full lg:ml-[290px] ">
