@@ -35,14 +35,14 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
         <div
           className={cn(
             "flex justify-between items-center text-[18px] font-semibold gap-1 text-sm truncate",
-            conversation.unread ? "font-bold" : "font-normal",
+            conversation.unseenCount > 0 ? "font-bold" : "font-normal",
           )}
         >
           <p className="truncate">{conversation.name}</p>
           <span
             className={cn(
               "font-normal whitespace-nowrap",
-              conversation.unread ? "text-black" : "text-gray-500",
+              conversation.unseenCount > 0 ? "text-black" : "text-gray-500",
             )}
           >
             {formatTime(conversation.lastMessageSentAt)}
@@ -51,13 +51,13 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
         <div
           className={cn(
             "flex text-sm mr-1 gap-1 overflow-hidden whitespace-nowrap",
-            conversation.unread ? "text-black" : "text-gray-500",
+            conversation.unseenCount > 0 ? "text-black" : "text-gray-500",
           )}
         >
           <p className="truncate flex-grow">
             {conversation.lastMessageContent}
           </p>
-          {conversation.unread && (
+          {conversation.unseenCount > 0 && (
             <div className="w-2 h-2 rounded-full flex-shrink-0 bg-red-500"></div>
           )}
         </div>

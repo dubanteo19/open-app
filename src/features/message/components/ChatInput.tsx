@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getSocketClient } from "@/shared/websocket";
+import { useStomp } from "@/hooks/useStomp";
 import EmojiPicker from "emoji-picker-react";
 import { debounce } from "lodash";
 import { ImageIcon, LucideSend } from "lucide-react";
@@ -22,6 +22,7 @@ export const ChatInput: FC<ChatInputProps> = ({
   const [message, setMessage] = React.useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiRef = React.useRef<HTMLDivElement>(null);
+  const { connected, stompClient } = useStomp();
   const handleSendMessage = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const filteredMessage = message.trim() === "" ? "👍" : message;
@@ -31,15 +32,14 @@ export const ChatInput: FC<ChatInputProps> = ({
   const debouncedSendTypingEvent = useMemo(
     () =>
       debounce(() => {
-        const client = getSocketClient();
         const body = {
           from: null,
           conversationId,
           to,
           type: "TYPING",
         };
-        if (client?.connected) {
-          client.publish({
+        if (connected && stompClient.current) {
+          stompClient?.current.publish({
             destination: "/app/chat.typing",
             body: JSON.stringify(body),
           });
@@ -47,7 +47,7 @@ export const ChatInput: FC<ChatInputProps> = ({
           console.log("Not connected, cannot send typing event");
         }
       }, 300),
-    [conversationId, to],
+    [conversationId, to, connected, stompClient],
   );
   const handleTyping = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);

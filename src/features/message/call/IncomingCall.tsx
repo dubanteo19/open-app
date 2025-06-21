@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useAppSelector } from "@/hooks/useAppDispatch";
 import { AVATAR } from "@/shared/constant";
 import { PhoneIcon, XIcon } from "lucide-react";
 import { FC } from "react";
@@ -14,6 +15,7 @@ interface IncomingCallProps {
   onReject: () => void;
 }
 export const IncomingCall: FC<IncomingCallProps> = ({ onAccept, onReject }) => {
+  const {remoteUsername} = useAppSelector(state=>state.call);
   return (
     <DialogContent className="w-[300px]">
       <DialogHeader>
@@ -23,7 +25,7 @@ export const IncomingCall: FC<IncomingCallProps> = ({ onAccept, onReject }) => {
       </DialogHeader>
       <div className="flex-center flex-col">
         <ImageContainer className="size-12" src={AVATAR} />
-        <h3>Du ban teo is calling you</h3>
+        <h3>{remoteUsername} is calling you</h3>
         <div className="flex space-x-5">
           <div className="flex flex-col items-center">
             <Button

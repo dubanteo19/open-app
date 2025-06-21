@@ -16,7 +16,7 @@ export const FollowPage = () => {
     ? {
         username,
         page: 0,
-        size: 5,
+        size: 20,
       }
     : skipToken;
   const query = isFollowing

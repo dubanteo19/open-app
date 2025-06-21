@@ -7,7 +7,7 @@ import { Link, Outlet } from "react-router-dom";
 import { ConversationList } from "../components/ConversationList";
 import { useAppSelector } from "@/hooks/useAppDispatch";
 import { ImageContainer } from "@/components/common/ImageContainer";
-import { CallManager } from "../components/CallManager";
+import { AVATAR } from "@/shared/constant";
 export const Header = () => {
   const { user } = useAppSelector((state) => state.auth);
   return (
@@ -15,7 +15,9 @@ export const Header = () => {
       <Link to={"/feed"}>
         <ImageContainer className="size-10" src={"/logo2.png"} />
       </Link>
-      <ImageContainer className="size-10" src={user?.avatarUrl} />
+      <Link to={`/profile/${user?.username}`}>
+        <ImageContainer className="size-10" src={user?.avatarUrl || AVATAR} />
+      </Link>
     </div>
   );
 };
@@ -41,7 +43,6 @@ export const ChatLayout = () => {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
-      <CallManager />
     </div>
   );
 };

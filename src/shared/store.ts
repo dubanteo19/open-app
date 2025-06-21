@@ -2,6 +2,7 @@ import { authApi } from "@/features/auth/api";
 import authReducer from "@/features/auth/slice";
 import chatReducer from "@/features/message/slice";
 import callReducer from "@/features/message/call/slice";
+import userMetaReducer from "@/features/user/meta/slice";
 import settingsReducer from "@/features/common/settings/slice";
 import { discoveryApi } from "@/features/discovery/api";
 import { chatApi } from "@/features/message/api";
@@ -17,6 +18,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { notificationApi } from "@/features/user/notifications/api";
 
 const persistConfig = {
   key: "root",
@@ -27,6 +29,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   chat: chatReducer,
   call: callReducer,
+  userMeta: userMetaReducer,
   settings: settingsReducer,
   [authApi.reducerPath]: authApi.reducer,
   [postApi.reducerPath]: postApi.reducer,
@@ -34,6 +37,7 @@ const rootReducer = combineReducers({
   [openerApi.reducerPath]: openerApi.reducer,
   [discoveryApi.reducerPath]: discoveryApi.reducer,
   [chatApi.reducerPath]: chatApi.reducer,
+  [notificationApi.reducerPath]: notificationApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -51,6 +55,7 @@ export const store = configureStore({
       commentApi.middleware,
       discoveryApi.middleware,
       chatApi.middleware,
+      notificationApi.middleware,
     ),
 });
 

@@ -1,11 +1,6 @@
 import { Dialog } from "@/components/ui/dialog";
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
-import {
-  activateSocketClient,
-  deactivateSocketClient,
-  getSocketClient,
-  subscribeWhenConnected,
-} from "@/shared/websocket";
+import { useStomp } from "@/hooks/useStomp";
 import { IMessage } from "@stomp/stompjs";
 import { useCallback, useEffect, useRef } from "react";
 import { CallSession } from "../call/CallSession";
@@ -22,27 +17,30 @@ export const CallManager = () => {
   const dispatch = useAppDispatch();
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
-  const { handleIce, handleAsnwer, acceptCall, startCall, endCall } = useWebRTC(
+  const { connected, subscribeToTopic, stompClient } = useStomp();
+  const { handleIce, handleAnswer, acceptCall, startCall, endCall } = useWebRTC(
     {
       onCallStateChange: (state) => dispatch(setCallState(state)),
       remoteVideoRef,
       localVideoRef,
       onRemoteUsernameChange: (username) =>
         dispatch(setRemoteUsername(username)),
+      stompClient: stompClient?.current,
     },
   );
   useEffect(() => {
-    if (remoteUsername && callState == "calling") {
-      if (user) startCall(user?.username, remoteUsername);
+    if (remoteUsername && callState === "calling" && user) {
+      startCall(user.username, remoteUsername);
     }
-  });
+  }, [remoteUsername, callState, user, startCall]);
+
   const onOffer = useCallback(
     (message: IMessage) => {
       const signal: SignalMessage = JSON.parse(message.body);
       if (user && signal.from) {
-        dispatch(setCallState("incoming"));
         dispatch(setRemoteUsername(signal.from));
         dispatch(setSdp(signal.sdp!));
+        dispatch(setCallState("incoming"));
       }
     },
     [dispatch, user],
@@ -50,9 +48,9 @@ export const CallManager = () => {
   const onAnswer = useCallback(
     (message: IMessage) => {
       const signal: SignalMessage = JSON.parse(message.body);
-      handleAsnwer(signal.sdp!);
+      handleAnswer(signal.sdp!);
     },
-    [handleAsnwer],
+    [handleAnswer],
   );
   const onIce = useCallback(
     (message: IMessage) => {
@@ -62,51 +60,41 @@ export const CallManager = () => {
     [handleIce],
   );
   useEffect(() => {
-    const client = getSocketClient();
-    if (!client) return;
-    const unsubscribeOffer = subscribeWhenConnected(
-      client,
+    if (!connected) return;
+    const unsubscribeOffer = subscribeToTopic(
       "/user/queue/call.offer",
       onOffer,
     );
-    const unsubscribeAnswer = subscribeWhenConnected(
-      client,
+    const unsubscribeAnswer = subscribeToTopic(
       "/user/queue/call.answer",
       onAnswer,
     );
-    const unsubscribeIce = subscribeWhenConnected(
-      client,
-      "/user/queue/call.ice",
-      onIce,
-    );
-    activateSocketClient();
+    const unsubscribeIce = subscribeToTopic("/user/queue/call.ice", onIce);
     return () => {
-      unsubscribeAnswer(), unsubscribeOffer();
+      unsubscribeAnswer();
+      unsubscribeOffer();
       unsubscribeIce();
-      deactivateSocketClient();
     };
-  }, [onOffer, onAnswer, onIce]);
+  }, [connected, subscribeToTopic, onAnswer, onOffer, onIce]);
   return (
-    <div>
-      <Dialog open={true}>
-        {callState == "incoming" && (
-          <IncomingCall
-            onAccept={() => {
-              if (user && remoteUsername) {
-                acceptCall(user?.username, remoteUsername, sdp!);
-              }
-            }}
-            onReject={() => dispatch(setCallState("idle"))}
-          />
-        )}
-        {(callState == "active" || callState == "calling") && (
-          <CallSession
-            onEndCall={endCall}
-            localRef={localVideoRef}
-            remoteRef={remoteVideoRef}
-          />
-        )}
-      </Dialog>
-    </div>
+    <Dialog open={callState != "idle"}>
+      {callState == "incoming" && (
+        <IncomingCall
+          onAccept={() => {
+            if (user && remoteUsername) {
+              acceptCall(user?.username, remoteUsername, sdp!);
+            }
+          }}
+          onReject={() => dispatch(setCallState("idle"))}
+        />
+      )}
+      {(callState == "active" || callState == "calling") && (
+        <CallSession
+          onEndCall={endCall}
+          localRef={localVideoRef}
+          remoteRef={remoteVideoRef}
+        />
+      )}
+    </Dialog>
   );
 };

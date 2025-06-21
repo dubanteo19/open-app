@@ -8,6 +8,7 @@ import {
   setSelectedConversationId,
 } from "./slice";
 import { Conversation, ConversationSummary } from "./type/conversation";
+import { setUnreadMessageCount, setUnseenConversationCount } from "../user/meta/slice";
 export const chatApi = createApi({
   reducerPath: "chatApi",
   tagTypes: ["Chat", "Message"],
@@ -29,6 +30,20 @@ export const chatApi = createApi({
           const messages = data.messages;
           dispatch(setSelectedConversationId(conversationId));
           dispatch(setMessagesForConversation({ conversationId, messages }));
+          dispatch(chatApi.endpoints.markAsSeen.initiate(conversationId));
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
+    getUnseenConversationCount: build.query<number, void>({
+      query: () => "chat/conversations/unseen",
+      transformResponse: extractData,
+      providesTags: ["Chat"],
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setUnseenConversationCount(data));
         } catch (error) {
           console.log(error);
         }
@@ -46,6 +61,13 @@ export const chatApi = createApi({
           console.log(error);
         }
       },
+    }),
+    markAsSeen: build.mutation<void, number>({
+      query: (id) => ({
+        url: `chat/conversations/${id}/seen`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Message"],
     }),
     sendMessage: build.mutation<Message, MessageCreateRequest>({
       query: (body) => ({
@@ -76,4 +98,6 @@ export const {
   useGetMessagesQuery,
   useSendMessageMutation,
   useGetConversationByIdQuery,
+  useMarkAsSeenMutation,
+  useGetUnseenConversationCountQuery
 } = chatApi;

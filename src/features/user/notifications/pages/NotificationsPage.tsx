@@ -2,9 +2,8 @@ import TabNotifications from "@/features/user/notifications/components/TabNotifi
 
 export const NotificationsPage = () => {
   return (
-      <div className="w-full h-full bg-white shadow-md rounded-md flex flex-col">
-        <TabNotifications />
-
-      </div>
+    <div className="w-full h-full bg-white shadow-md rounded-md flex flex-col">
+      <TabNotifications />
+    </div>
   );
 };

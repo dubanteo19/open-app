@@ -53,7 +53,7 @@ export const LoginPage = () => {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center text-3xl font-bold flex items-center justify-center gap-x-1.5">
-            Sign in to{" "}
+            <p>Sign in to </p>
             <div className="w-10 h-10 ">
               <img
                 className="h-max w-max"
